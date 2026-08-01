@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion Produits - ZINA Admin</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "zina-black": "#0F0F0F",
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+
+<main class="py-12 px-6 max-w-7xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-12">
+    <!-- Admin Sidebar -->
+    <aside class="w-full md:w-64 space-y-8">
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5">
+        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <span class="material-icons-outlined text-3xl text-primary">inventory_2</span>
+        </div>
+        <div class="text-center">
+          <h2 class="font-bold text-lg">Produits</h2>
+          <p class="text-[10px] tracking-widest uppercase opacity-40">Inventaire ZINA</p>
+        </div>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="/admin/dashboard.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">dashboard</span>
+          Tableau de bord
+        </a>
+        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl bg-primary text-white font-medium flex items-center gap-3 transition-all shadow-lg shadow-primary/20">
+          <span class="material-icons-outlined">inventory_2</span>
+          Produits
+        </a>
+        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">shopping_cart</span>
+          Commandes
+        </a>
+        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">email</span>
+          Messages
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <section class="flex-grow space-y-12">
+      <div class="flex items-center justify-between">
+        <h1 class="text-4xl serif-text">Gestion des Produits</h1>
+        <button onclick="document.getElementById('product-form-card').scrollIntoView({behavior:'smooth'})" class="btn btn-primary rounded-full px-8 flex items-center gap-2">
+          <span class="material-icons-outlined">add</span>
+          Nouveau produit
+        </button>
+      </div>
+
+      <!-- Product Form Card -->
+      <div id="product-form-card" class="bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-primary/5 shadow-sm space-y-6">
+        <h2 class="text-xl serif-text">Ajouter / Modifier un produit</h2>
+        <form id="product-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="form-group col-span-2">
+            <label class="text-[10px] font-bold uppercase tracking-widest opacity-60">Nom du bijou</label>
+            <input type="text" name="name" required class="w-full border-b border-primary/20 focus:border-primary outline-none py-2 bg-transparent transition-colors">
+          </div>
+          <div class="form-group">
+            <label class="text-[10px] font-bold uppercase tracking-widest opacity-60">Prix (MAD)</label>
+            <input type="number" name="price" step="0.01" required class="w-full border-b border-primary/20 focus:border-primary outline-none py-2 bg-transparent transition-colors">
+          </div>
+          <div class="form-group">
+            <label class="text-[10px] font-bold uppercase tracking-widest opacity-60">Catégorie</label>
+            <select name="category" required class="w-full border-b border-primary/20 focus:border-primary outline-none py-2 bg-transparent transition-colors">
+              <option value="bagues">Bagues</option>
+              <option value="colliers">Colliers</option>
+              <option value="boucles">Boucles</option>
+              <option value="bracelets">Bracelets</option>
+              <option value="beldi">Beldi</option>
+              <option value="ensembles">Ensembles</option>
+            </select>
+          </div>
+          <div class="form-group col-span-2">
+            <label class="text-[10px] font-bold uppercase tracking-widest opacity-60">Description</label>
+            <textarea name="description" required class="w-full border-b border-primary/20 focus:border-primary outline-none py-2 bg-transparent transition-colors h-24 resize-none"></textarea>
+          </div>
+          <div class="form-group col-span-2">
+            <label class="text-[10px] font-bold uppercase tracking-widest opacity-60">URL de l'image</label>
+            <input type="url" name="image" placeholder="https://..." class="w-full border-b border-primary/20 focus:border-primary outline-none py-2 bg-transparent transition-colors">
+          </div>
+          <div class="col-span-2 flex justify-end gap-4 pt-4">
+            <button type="button" class="px-8 py-3 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all font-bold text-xs uppercase tracking-widest" onclick="resetForm()">Annuler</button>
+            <button type="submit" class="btn btn-primary px-12 py-3 rounded-full shadow-lg shadow-primary/20 font-bold text-xs uppercase tracking-widest">Enregistrer le bijou</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Products List -->
+      <div class="space-y-6">
+        <h2 class="text-2xl serif-text">Inventaire actuel</h2>
+        <div id="products-table" class="bg-white dark:bg-zinc-900 rounded-3xl border border-primary/5 shadow-sm overflow-hidden">
+          <!-- Products injected here -->
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/admin.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  Auth.requireAdmin();
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    renderAdminProducts();
+
+    document.getElementById('product-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const productData = Object.fromEntries(formData);
+      const productId = e.target.dataset.productId;
+      
+      let result;
+      if (productId) {
+        result = Products.update(productId, productData);
+      } else {
+        result = Products.create(productData);
+      }
+      
+      if (result.success) {
+        App.showAlert(productId ? 'Bijou mis à jour !' : 'Bijou créé !', 'success');
+        resetForm();
+        renderAdminProducts();
+      } else {
+        App.showAlert(result.message, 'error');
+      }
+    });
+  });
+
+  function renderAdminProducts() {
+    const products = Products.getAll();
+    const container = document.getElementById('products-table');
+    
+    if (products.length === 0) {
+      container.innerHTML = '<div class="p-20 text-center text-zinc-400">Aucun produit dans l\'inventaire.</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <table class="w-full text-left">
+        <thead class="bg-primary/5 text-[10px] font-black uppercase tracking-widest opacity-60">
+          <tr>
+            <th class="px-6 py-4">Produit</th>
+            <th class="px-6 py-4">Catégorie</th>
+            <th class="px-6 py-4">Prix</th>
+            <th class="px-6 py-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-primary/5">
+          ${products.map(p => `
+            <tr class="hover:bg-primary/5 transition-colors group">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-4">
+                  <img src="${p.image}" class="w-12 h-12 rounded-xl object-cover border border-primary/10 shadow-sm" onerror="this.src='https://via.placeholder.com/100'">
+                  <span class="font-bold text-sm">${p.name}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest">${p.category}</span>
+              </td>
+              <td class="px-6 py-4 font-bold text-sm text-primary">${Cart.formatPrice(p.price)}</td>
+              <td class="px-6 py-4 text-right space-x-2">
+                <button onclick="editProduct(${p.id})" class="material-icons-outlined text-zinc-300 hover:text-primary transition-colors">edit</button>
+                <button onclick="deleteProduct(${p.id})" class="material-icons-outlined text-zinc-300 hover:text-red-500 transition-colors">delete</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  window.editProduct = (id) => {
+    const p = Products.getById(id);
+    const form = document.getElementById('product-form');
+    form.dataset.productId = id;
+    form.name.value = p.name;
+    form.price.value = p.price;
+    form.category.value = p.category;
+    form.description.value = p.description;
+    form.image.value = p.image || '';
+    document.getElementById('product-form-card').scrollIntoView({behavior:'smooth'});
+  };
+
+  window.deleteProduct = (id) => {
+    if (confirm('Voulez-vous vraiment supprimer ce bijou ?')) {
+      if (Products.delete(id).success) {
+        App.showAlert('Produit supprimé', 'success');
+        renderAdminProducts();
+      }
+    }
+  };
+
+  function resetForm() {
+    const form = document.getElementById('product-form');
+    form.reset();
+    delete form.dataset.productId;
+  }
+</script>
+</body>
+</html>

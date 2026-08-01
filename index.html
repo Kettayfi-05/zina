@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>ZINA | Luxury Jewelry</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#c6a15d",
+            "background-light": "#f8f7f6",
+            "background-dark": "#1e1a14",
+            "zina-black": "#0F0F0F",
+            "zina-ivory": "#F8F6F2",
+            "zina-taupe": "#B7B0A5",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"],
+            "serif": ["Playfair Display", "serif"],
+          },
+        },
+      },
+    }
+  </script>
+  
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      scroll-behavior: smooth;
+    }
+    .serif-text {
+      font-family: 'Playfair Display', serif;
+    }
+    .marquee {
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+      gap: 20px;
+    }
+    .marquee-content {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-around;
+      min-width: 100%;
+      gap: 20px;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      animation: marquee 40s linear infinite;
+    }
+    .marquee:hover .animate-marquee {
+      animation-play-state: paused;
+    }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+
+<div id="header-container"></div>
+
+<main class="pt-20">
+  <!-- Hero Section -->
+  <section class="h-[calc(100vh-80px)] min-h-[600px] flex flex-col md:flex-row overflow-hidden">
+    <div class="w-full md:w-1/2 h-full bg-zinc-200">
+      <img class="w-full h-full object-cover" alt="Editorial close up of gold jewelry on model" src="assets/images/branding/fille2.jfif"/>
+    </div>
+    <div class="w-full md:w-1/2 h-full flex items-center justify-center bg-zina-ivory dark:bg-zinc-900 p-12 lg:p-24">
+      <div class="max-w-md space-y-8">
+        <span class="text-primary uppercase tracking-[0.3em] text-sm font-semibold"> Nouvelle Collection</span>
+        <h1 class="text-5xl lg:text-7xl serif-text font-light leading-tight">The Golden Hour Collection</h1>
+        <p class="text-zinc-600 dark:text-zinc-400 font-light leading-relaxed">
+      Des formes sculpturales inspirées par les sables mouvants de la Méditerranée.
+      Des pièces façonnées à la main en or massif 18 carats, pensées pour l’icône moderne.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+          <a href="/shop.html" class="bg-primary text-white px-8 py-4 rounded-full text-sm font-bold tracking-widest uppercase hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 text-center">
+            Explorer la Collection
+          </a>
+          <a href="/shop.html" class="border border-zina-black/20 dark:border-zina-ivory/20 px-8 py-4 rounded-full text-sm font-bold tracking-widest uppercase hover:bg-zina-black hover:text-white dark:hover:bg-white dark:hover:text-zina-black transition-all text-center">
+            Découvrir les Créations
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+<section class="py-24 px-6 max-w-7xl mx-auto">
+  <div class="flex items-center justify-between mb-12">
+    <h2 class="text-3xl serif-text">La Sélection ZINA</h2>
+    <a
+      href="shop.html"
+      class="text-sm font-bold tracking-widest uppercase border-b border-primary pb-1 hover:text-primary transition-colors">
+      Explorer
+    </a>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+    
+    <!-- Bagues -->
+    <a href="shop.html?category=bagues" class="group">
+      <div class="aspect-[4/5] bg-zina-ivory dark:bg-zinc-800 rounded-xl overflow-hidden mb-3">
+        <img
+          src="assets/images/branding/BAGUE.jfif"
+          alt="Bagues"
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+      <p class="text-center text-xs tracking-widest uppercase font-medium group-hover:text-primary transition-colors">
+        Bagues
+      </p>
+    </a>
+
+    <!-- Colliers -->
+    <a href="shop.html?category=colliers" class="group">
+      <div class="aspect-[4/5] bg-zina-ivory dark:bg-zinc-800 rounded-xl overflow-hidden mb-3">
+        <img
+          src="assets/images/branding/COLLIER.jfif"
+          alt="Colliers"
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+      <p class="text-center text-xs tracking-widest uppercase font-medium group-hover:text-primary transition-colors">
+        Colliers
+      </p>
+    </a>
+
+    <!-- Boucles -->
+    <a href="shop.html?category=boucles" class="group">
+      <div class="aspect-[4/5] bg-zina-ivory dark:bg-zinc-800 rounded-xl overflow-hidden mb-3">
+        <img
+          src="assets/images/branding/BOUCLES.jfif"
+          alt="Boucles"
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+      <p class="text-center text-xs tracking-widest uppercase font-medium group-hover:text-primary transition-colors">
+        Boucles
+      </p>
+    </a>
+
+    <!-- Bracelets -->
+    <a href="shop.html?category=bracelets" class="group">
+      <div class="aspect-[4/5] bg-zina-ivory dark:bg-zinc-800 rounded-xl overflow-hidden mb-3">
+        <img
+          src="assets/images/branding/BRACELETS.jfif"
+          alt="Bracelets"
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+      <p class="text-center text-xs tracking-widest uppercase font-medium group-hover:text-primary transition-colors">
+        Bracelets
+      </p>
+    </a>
+
+    <!-- Beldi -->
+    <a href="shop.html?category=beldi" class="group">
+      <div class="aspect-[4/5] bg-zina-ivory dark:bg-zinc-800 rounded-xl overflow-hidden mb-3">
+        <img
+          src="assets/images/branding/BELDI.jfif"
+          alt="Beldi"
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+      <p class="text-center text-xs tracking-widest uppercase font-medium group-hover:text-primary transition-colors">
+        Beldi
+      </p>
+    </a>
+
+    <!-- Ensembles -->
+    <a href="shop.html?category=ensembles" class="group">
+      <div class="aspect-[4/5] bg-zina-ivory dark:bg-zinc-800 rounded-xl overflow-hidden mb-3">
+        <img
+          src="assets/images/branding/ENSEMBLE.jfif"
+          alt="Ensembles"
+          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+      <p class="text-center text-xs tracking-widest uppercase font-medium group-hover:text-primary transition-colors">
+        Ensembles
+      </p>
+    </a>
+
+  </div>
+</section>
+
+  <!-- Lookbook Marquee -->
+  <section class="py-12 bg-zina-taupe/10 dark:bg-zinc-900 overflow-hidden">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl serif-text mb-2">L’Élégance Inspirée</h2>
+      <p class="text-sm tracking-widest uppercase opacity-60">Visuels</p>
+    </div>
+    <div class="marquee py-4">
+      <div class="marquee-content animate-marquee">
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Fashion model" src="assets/images/products/coliierANIMAL1.jfif"/>
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Jewelry box" src="assets/images/products/braceletANIMAL1.jfif"/>
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Jewelry box" src="assets/images/products/bagueANIMAL1.jfif"/>
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Jewelry box" src="assets/images/products/collierANIMAL2.jfif"/>
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Jewelry box" src="assets/images/products/collierANIMAL3.jfif"/>
+        </div>
+      <div class="marquee-content animate-marquee">
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Fashion model" src="assets/images/products/coliierANIMAL1.jfif"/>
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Jewelry box" src="assets/images/products/braceletANIMAL1.jfif"/>
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Jewelry box" src="assets/images/products/bagueANIMAL1.jfif"/>
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Jewelry box" src="assets/images/products/collierANIMAL2.jfif"/>
+        <img class="w-80 h-[500px] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500" alt="Jewelry box" src="assets/images/products/collierANIMAL3.jfif"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products (Dynamic from localStorage) -->
+  <section class="py-24 px-6 max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row items-center justify-between mb-16 space-y-4 md:space-y-0">
+      <h2 class="text-3xl serif-text">Les Incontournables</h2>
+      <div class="flex space-x-8">
+        <button class="text-sm font-bold tracking-widest uppercase border-b-2 border-primary pb-2">Dernière chance</button>
+        <!-- <button class="text-sm font-bold tracking-widest uppercase text-zinc-400 hover:text-zina-black dark:hover:text-zina-ivory pb-2 transition-colors">Nouvelle Collection</button> -->
+      </div>
+    </div>
+    
+    <!-- Products Grid (Dynamic) -->
+    <div id="featured-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12"></div>
+  </section>
+
+  <!-- Newsletter -->
+<section class="bg-zina-ivory dark:bg-zinc-900 py-24 px-6 border-y border-primary/10">
+  <div class="max-w-xl mx-auto text-center space-y-8">
+    <h2 class="text-4xl serif-text">Rejoignez le Cercle Privé</h2>
+    <p class="text-zinc-500 dark:text-zinc-400 font-light">
+      Inscrivez-vous pour bénéficier d’un accès anticipé aux nouvelles collections,
+      d’invitations exclusives à nos événements et de conseils d’entretien joaillier.
+    </p>
+    <form class="flex flex-col sm:flex-row gap-4" onsubmit="handleNewsletter(event)">
+      <input
+        class="flex-grow bg-transparent border-0 border-b border-zina-black/20 dark:border-zina-ivory/20 focus:ring-0 focus:border-primary px-0 py-3 text-sm transition-colors"
+        placeholder="Votre adresse e-mail"
+        type="email"
+        required
+      />
+      <button
+        class="text-xs font-bold tracking-[0.2em] uppercase bg-zina-black text-white dark:bg-white dark:text-zina-black px-10 py-4 hover:bg-primary dark:hover:bg-primary transition-colors"
+        type="submit"
+      >
+        Rejoindre
+      </button>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<div id="footer-container"></div>
+
+<!-- JavaScript -->
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  // Newsletter Handler
+  function handleNewsletter(e) {
+    e.preventDefault();
+    alert('Thank you for subscribing to ZINA!');
+    e.target.reset();
+  }
+
+  // Render Featured Products (Dynamic from localStorage)
+  function renderFeaturedProducts() {
+    const products = Products.getAll();
+    const featured = products.slice(0, 4);
+    const container = document.getElementById('featured-products');
+    if (!container) return;
+    
+    container.innerHTML = featured.map(product => `
+      <div class="group cursor-pointer" onclick="window.location.href='/product.html?id=${product.id}'">
+        <div class="relative aspect-[3/4] bg-zina-ivory dark:bg-zinc-800 rounded-xl overflow-hidden mb-4">
+          <img class="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-80" alt="${product.name}" src="${product.image}"/>
+          <button class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm text-zina-black text-xs font-bold py-3 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0" onclick="event.stopPropagation(); addToCartQuick(${product.id})">Quick Add</button>
+        </div>
+        <div class="space-y-1">
+          <h3 class="font-medium">${product.name}</h3>
+          <p class="text-sm text-zinc-500">${Cart.formatPrice(product.price)}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addToCartQuick(productId) {
+    if (!Auth.isLoggedIn()) {
+      window.location.href = '/auth/login.html';
+      return;
+    }
+    Cart.addItem(productId, 1);
+    Cart.updateCartBadge();
+    App.showAlert('Produit ajouté au panier !', 'success');
+  }
+
+  // Initialize on Load
+  document.addEventListener('DOMContentLoaded', () => {
+    renderFeaturedProducts();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart - ZINA</title>
+
+
+    <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="/assets/css/base.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "background-light": "#f8f7f6",
+            "background-dark": "#1e1a14",
+            "zina-black": "#0F0F0F",
+            "zina-ivory": "#F8F6F2",
+            "zina-taupe": "#B7B0A5",
+          },
+          fontFamily: {
+            display: ["Manrope", "sans-serif"],
+            serif: ["Playfair Display", "serif"],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+<main class="pt-10">
+  <section style="padding:var(--spacing-xl) 0;">
+    <div class="container">
+
+      <h1 class="text-center text-4xl md:text-5xl serif-text font-light tracking-widest mb-12">
+        Panier
+      </h1>
+
+      <div class="flex justify-center">
+        <div class="cart-layout w-full max-w-6xl" id="cart-content"></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+ <div id="footer-container"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/auth.js"></script>
+  <script src="/assets/js/cart.js"></script>
+  <script src="/assets/js/products.js"></script>
+  <script src="/assets/js/orders.js"></script>
+  <script src="/assets/js/admin.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Auth.isLoggedIn()) { window.location.href = '/auth/login.html'; return; }
+      
+      renderCart();
+      
+      function renderCart() {
+        const cartItems = Cart.getItems();
+        const container = document.getElementById('cart-content');
+        
+if (cartItems.length === 0) {
+  container.innerHTML = `
+    <div class="empty-cart">
+      <div class="empty-cart-icon">🛒</div>
+      <h2>Votre panier est vide</h2>
+      <p>Découvrez notre magnifique collection</p>
+      <a href="/shop.html" class="btn btn-primary">Commencer vos achats</a>
+    </div>
+  `;
+  return;
+}
+
+        
+        container.innerHTML = `
+          <div class="cart-items">
+            ${cartItems.map(item => `
+              <div class="cart-item">
+                <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                <div class="cart-item-info">
+                  <div class="cart-item-name">${item.name}</div>
+                  <div class="cart-item-price">${Cart.formatPrice(item.price)}</div>
+                  <div class="quantity-controls">
+                    <button class="quantity-btn" onclick="updateQty(${item.productId}, ${item.quantity - 1})">-</button>
+                    <span class="quantity-value">${item.quantity}</span>
+                    <button class="quantity-btn" onclick="updateQty(${item.productId}, ${item.quantity + 1})">+</button>
+                  </div>
+                  <button class="remove-btn" onclick="removeItem(${item.productId})">Remove</button>
+                </div>
+                <div style="font-weight:600;color:var(--color-gold);">${Cart.formatPrice(item.price * item.quantity)}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="cart-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-row"><span>Subtotal</span><span class="amount">${Cart.formatPrice(Cart.getTotal())}</span></div>
+            <div class="summary-row"><span>Shipping</span><span class="amount">Free</span></div>
+            <div class="summary-row total"><span>Total</span><span class="amount">${Cart.formatPrice(Cart.getTotal())}</span></div>
+            <a href="/checkout.html" class="btn btn-primary" style="width:100%;margin-top:1rem;">Proceed to Checkout</a>
+          </div>
+        `;
+      }
+      
+      window.updateQty = (productId, newQty) => { Cart.updateQuantity(productId, newQty); renderCart(); };
+      window.removeItem = (productId) => { if (confirm('Remove this item?')) { Cart.removeItem(productId); renderCart(); } };
+    });
+  </script>
+  <script src="/assets/js/shared-components.js"></script>
+</body>
+</html>

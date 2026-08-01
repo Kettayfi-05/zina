@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop - ZINA Jewelry</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="/assets/css/base.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "background-light": "#f8f7f6",
+            "background-dark": "#1e1a14",
+            "zina-black": "#0F0F0F",
+            "zina-ivory": "#F8F6F2",
+            "zina-taupe": "#B7B0A5",
+          },
+          fontFamily: {
+            display: ["Manrope", "sans-serif"],
+            serif: ["Playfair Display", "serif"],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+<main class="pt-10">
+    <section style="padding: var(--spacing-xl) 0;">
+      <div class="container">
+        <!-- <div class="breadcrumbs">
+          <a href="/index.html">Home</a>
+          <span>/</span>
+          <span>Shop</span>
+        </div>
+
+        <h1>Our Collection</h1>
+        <p style="color: var(--color-taupe); margin-bottom: var(--spacing-xl);">
+          Explore our exquisite selection of handcrafted jewelry
+        </p> -->
+
+        <!-- Filters -->
+        <div class="filters">
+          <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+            <button class="filter-btn active" data-category="all">Nos produits</button>
+            <button class="filter-btn" data-category="bagues">Bagues</button>
+            <button class="filter-btn" data-category="colliers">Colliers</button>
+            <button class="filter-btn" data-category="boucles">Boucles</button>
+            <button class="filter-btn" data-category="bracelets">Bracelets</button>
+            <button class="filter-btn" data-category="beldi">Beldi</button>
+            <button class="filter-btn" data-category="ensembles">Ensembles</button>
+          </div>
+          
+          <div class="search-box">
+            <input type="text" id="search-input" placeholder="Chercher des produits...">
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="product-grid" id="products-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/auth.js"></script>
+  <script src="/assets/js/cart.js"></script>
+  <script src="/assets/js/products.js"></script>
+  <script src="/assets/js/orders.js"></script>
+  <script src="/assets/js/app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let currentCategory = 'all';
+      let searchQuery = '';
+
+      // Check URL params for category
+      const urlParams = new URLSearchParams(window.location.search);
+      const categoryParam = urlParams.get('category');
+      if (categoryParam) {
+        currentCategory = categoryParam;
+      }
+
+      // Function to render products
+      function renderProducts() {
+        const products = Products.filter(currentCategory, searchQuery);
+        Products.renderGrid(products, 'products-grid');
+      }
+
+      // Initial render
+      renderProducts();
+
+      // Set active filter button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.dataset.category === currentCategory) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // Category filter handlers
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Update active class
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          // Update category and render
+          currentCategory = btn.dataset.category;
+          renderProducts();
+        });
+      });
+
+      // Search handler with debounce
+      let searchTimeout;
+      document.getElementById('search-input').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          searchQuery = e.target.value;
+          renderProducts();
+        }, 300);
+      });
+    });
+    
+  </script>
+
+<script src="/assets/js/shared-components.js"></script>
+</body>
+</html>

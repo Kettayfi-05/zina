@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZINA - Luxury Jewelry</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <a href="/index.html" class="logo">ZINA</a>
+      
+      <nav>
+        <ul>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/shop.html">Shop</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li id="auth-links"></li>
+        </ul>
+      </nav>
+      
+      <div class="header-icons">
+        <a href="/cart.html" class="icon-btn">
+          🛒
+          <span class="cart-badge" style="display: none;">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-bg-pattern"></div>
+      <div class="hero-content">
+        <h1>Timeless Elegance</h1>
+        <p>Discover our exquisite collection of handcrafted luxury jewelry, designed to celebrate life's precious moments.</p>
+        <a href="/shop.html" class="btn btn-primary">Explore Collection</a>
+      </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section style="padding: var(--spacing-2xl) 0;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+          <h2>Featured Collection</h2>
+          <p style="color: var(--color-taupe); font-size: 1.125rem;">Handpicked pieces for the discerning connoisseur</p>
+        </div>
+        
+        <div class="product-grid" id="featured-products"></div>
+        
+        <div style="text-align: center; margin-top: var(--spacing-xl);">
+          <a href="/shop.html" class="btn btn-outline">View All Products</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section style="background: white; padding: var(--spacing-2xl) 0;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: var(--spacing-xl);">
+          <h2>Shop by Category</h2>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-lg);">
+          <a href="/shop.html?category=rings" class="category-card" style="text-align: center; padding: var(--spacing-xl); border: 1px solid var(--color-border); transition: var(--transition); display: block;">
+            <div style="font-size: 3rem; margin-bottom: var(--spacing-md);">💍</div>
+            <h3>Rings</h3>
+            <p style="color: var(--color-taupe);">Engagement & Wedding</p>
+          </a>
+          
+          <a href="/shop.html?category=necklaces" class="category-card" style="text-align: center; padding: var(--spacing-xl); border: 1px solid var(--color-border); transition: var(--transition); display: block;">
+            <div style="font-size: 3rem; margin-bottom: var(--spacing-md);">📿</div>
+            <h3>Necklaces</h3>
+            <p style="color: var(--color-taupe);">Elegant & Timeless</p>
+          </a>
+          
+          <a href="/shop.html?category=earrings" class="category-card" style="text-align: center; padding: var(--spacing-xl); border: 1px solid var(--color-border); transition: var(--transition); display: block;">
+            <div style="font-size: 3rem; margin-bottom: var(--spacing-md);">✨</div>
+            <h3>Earrings</h3>
+            <p style="color: var(--color-taupe);">Stunning Designs</p>
+          </a>
+          
+          <a href="/shop.html?category=bracelets" class="category-card" style="text-align: center; padding: var(--spacing-xl); border: 1px solid var(--color-border); transition: var(--transition); display: block;">
+            <div style="font-size: 3rem; margin-bottom: var(--spacing-md);">⚜️</div>
+            <h3>Bracelets</h3>
+            <p style="color: var(--color-taupe);">Luxury Accents</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section style="padding: var(--spacing-2xl) 0;">
+      <div class="container">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+          <h2>Crafted with Passion</h2>
+          <p style="color: var(--color-taupe); font-size: 1.125rem; line-height: 1.8; margin-top: var(--spacing-md);">
+            Each piece in our collection is meticulously handcrafted by master artisans using the finest materials. 
+            From ethically sourced diamonds to 18k gold, we ensure that every detail reflects our commitment to 
+            excellence and sustainability.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>ZINA</h4>
+          <p>Luxury jewelry for life's precious moments.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/shop.html?category=rings">Rings</a></li>
+            <li><a href="/shop.html?category=necklaces">Necklaces</a></li>
+            <li><a href="/shop.html?category=earrings">Earrings</a></li>
+            <li><a href="/shop.html?category=bracelets">Bracelets</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Customer Service</h4>
+          <ul>
+            <li><a href="/contact.html">Contact Us</a></li>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Size Guide</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Pinterest</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 ZINA Jewelry. All rights reserved. | Demo E-Commerce Site</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/auth.js"></script>
+  <script src="/assets/js/cart.js"></script>
+  <script src="/assets/js/products.js"></script>
+  <script src="/assets/js/orders.js"></script>
+  <script src="/assets/js/app.js"></script>
+  
+  <!-- Page-specific script -->
+  <script>
+    // Load featured products on homepage
+    document.addEventListener('DOMContentLoaded', () => {
+      const products = Products.getAll();
+      // Show first 6 products as featured
+      const featured = products.slice(0, 6);
+      Products.renderGrid(featured, 'featured-products');
+
+      // Add hover effect to category cards
+      const categoryCards = document.querySelectorAll('.category-card');
+      categoryCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-8px)';
+          this.style.borderColor = 'var(--color-gold)';
+          this.style.boxShadow = '0 12px 24px rgba(198, 161, 91, 0.15)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+          this.style.borderColor = 'var(--color-border)';
+          this.style.boxShadow = 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

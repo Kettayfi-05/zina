@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - ZINA</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+  <main>
+    <section style="padding:var(--spacing-xl) 0;">
+      <div class="container">
+        <h1>Checkout</h1>
+        <div class="checkout-layout">
+          <div class="checkout-form">
+            <form id="checkout-form">
+              <div class="checkout-section">
+                <h3>Shipping Information</h3>
+                <div class="form-group"><label>Full Name</label><input type="text" name="fullName" required></div>
+                <div class="form-group"><label>Phone Number</label><input type="tel" name="phone" required></div>
+                <div class="form-group"><label>Address</label><input type="text" name="address" required></div>
+                <div class="form-row">
+                  <div class="form-group"><label>City</label><input type="text" name="city" required></div>
+                  <div class="form-group"><label>Postal Code</label><input type="text" name="postalCode" required></div>
+                </div>
+                <div class="form-group"><label>Country</label><input type="text" name="country" required></div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%;">Place Order</button>
+            </form>
+          </div>
+          <div class="order-summary" id="order-summary"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+ <div id="footer-container"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/auth.js"></script>
+  <script src="/assets/js/cart.js"></script>
+  <script src="/assets/js/products.js"></script>
+  <script src="/assets/js/orders.js"></script>
+  <script src="/assets/js/admin.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Auth.isLoggedIn()) { window.location.href = '/auth/login.html'; return; }
+      const cartItems = Cart.getItems();
+      if (cartItems.length === 0) { window.location.href = '/shop.html'; return; }
+      
+      const summary = document.getElementById('order-summary');
+      summary.innerHTML = `
+        <h3>Order Summary</h3>
+        ${cartItems.map(item => `<div class="order-item"><span class="order-item-name">${item.name}</span><span class="order-item-qty">x${item.quantity}</span><span>${Cart.formatPrice(item.price * item.quantity)}</span></div>`).join('')}
+        <div class="summary-row total" style="margin-top:1rem;"><span>Total</span><span class="amount">${Cart.formatPrice(Cart.getTotal())}</span></div>
+      `;
+      
+      document.getElementById('checkout-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const orderData = Object.fromEntries(formData);
+        const result = Orders.create(orderData);
+        if (result.success) {
+          App.showAlert('Order placed successfully!', 'success');
+          setTimeout(() => window.location.href = '/index.html', 2000);
+        } else {
+          App.showAlert(result.message, 'error');
+        }
+      });
+    });
+  </script>
+  <script src="/assets/js/shared-components.js"></script>
+</body>
+</html>

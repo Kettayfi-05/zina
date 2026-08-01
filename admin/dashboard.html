@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - ZINA</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "zina-black": "#0F0F0F",
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+
+<main class="py-12 px-6 max-w-7xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-12">
+    <!-- Admin Sidebar (Style Profile) -->
+    <aside class="w-full md:w-64 space-y-8">
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5">
+        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <span class="material-icons-outlined text-3xl text-primary">admin_panel_settings</span>
+        </div>
+        <div class="text-center">
+          <h2 class="font-bold text-lg">Administration</h2>
+          <p class="text-[10px] tracking-widest uppercase opacity-40">ZINA Luxury</p>
+        </div>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="/admin/dashboard.html" class="w-full text-left px-6 py-3 rounded-xl bg-primary text-white font-medium flex items-center gap-3 transition-all shadow-lg shadow-primary/20">
+          <span class="material-icons-outlined">dashboard</span>
+          Tableau de bord
+        </a>
+        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">inventory_2</span>
+          Produits
+        </a>
+        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">shopping_cart</span>
+          Commandes
+        </a>
+        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">email</span>
+          Messages
+        </a>
+        <button onclick="handleLogout()" class="w-full text-left px-6 py-3 rounded-xl hover:bg-red-50 text-red-500 font-medium flex items-center gap-3 transition-all mt-12">
+          <span class="material-icons-outlined">logout</span>
+          Déconnexion
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Admin Content -->
+    <section class="flex-grow space-y-12">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl serif-text">Tableau de bord</h1>
+          <p class="text-zinc-500 font-light">Vue d'ensemble de votre boutique</p>
+        </div>
+        <div class="bg-white dark:bg-zinc-900 px-4 py-2 rounded-full border border-primary/10 flex items-center gap-2">
+          <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+          <span class="text-xs font-bold uppercase tracking-widest">Live Status</span>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div id="stats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Stats Injected Here -->
+      </div>
+
+      <!-- Recent Orders Section -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl serif-text">Commandes récentes</h2>
+          <a href="/admin/orders.html" class="text-xs font-bold uppercase tracking-widest text-primary border-b border-primary/20 pb-1 hover:border-primary transition-all">Voir tout</a>
+        </div>
+        <div id="recent-orders" class="grid gap-4">
+          <!-- Orders Injected Here -->
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/admin.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  Auth.requireAdmin();
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const stats = Orders.getStats();
+    const products = Products.getAll();
+    
+    // Stats Injection with Premium Look
+    document.getElementById('stats').innerHTML = `
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-2">Produits</p>
+        <div class="flex items-end justify-between">
+          <span class="text-3xl font-bold">${products.length}</span>
+          <span class="material-icons-outlined text-primary/20 text-4xl">inventory_2</span>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-2">Commandes</p>
+        <div class="flex items-end justify-between">
+          <span class="text-3xl font-bold">${stats.total}</span>
+          <span class="material-icons-outlined text-primary/20 text-4xl">shopping_cart</span>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-2">En attente</p>
+        <div class="flex items-end justify-between">
+          <span class="text-3xl font-bold text-amber-500">${stats.pending}</span>
+          <span class="material-icons-outlined text-amber-500/20 text-4xl">pending_actions</span>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-2">Revenu total</p>
+        <div class="flex items-end justify-between">
+          <span class="text-2xl font-bold text-primary">${Cart.formatPrice(stats.revenue)}</span>
+          <span class="material-icons-outlined text-primary/20 text-4xl">payments</span>
+        </div>
+      </div>
+    `;
+
+    const orders = Orders.getAll().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+    const ordersContainer = document.getElementById('recent-orders');
+    
+    if (orders.length === 0) {
+      ordersContainer.innerHTML = '<div class="p-12 text-center bg-white rounded-2xl border border-dashed border-primary/20 text-zinc-400">Aucune commande pour le moment.</div>';
+    } else {
+      ordersContainer.innerHTML = orders.map(o => `
+        <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-primary/5 flex items-center justify-between group hover:border-primary/20 transition-all">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 bg-primary/5 rounded-full flex items-center justify-center font-bold text-primary text-xs">
+              #${o.id}
+            </div>
+            <div>
+              <p class="font-bold text-sm">${o.shipping?.fullName || 'Client'}</p>
+              <p class="text-[10px] text-zinc-400 uppercase tracking-widest">${Orders.formatDate(o.date)}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="text-right">
+              <p class="font-bold text-primary text-sm">${Cart.formatPrice(o.total)}</p>
+              <p class="text-[10px] text-zinc-400 uppercase tracking-widest">${o.items.length} articles</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-600">
+              ${o.status}
+            </span>
+            <a href="/admin/orders.html" class="material-icons-outlined text-zinc-300 hover:text-primary transition-colors">chevron_right</a>
+          </div>
+        </div>
+      `).join('');
+    }
+  });
+
+  function handleLogout() {
+    Auth.logout();
+    window.location.href = '/index.html';
+  }
+</script>
+</body>
+</html>

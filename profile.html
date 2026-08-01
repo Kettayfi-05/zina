@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Compte - ZINA</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "background-light": "#f8f7f6",
+            "background-dark": "#1e1a14",
+            "zina-black": "#0F0F0F",
+            "zina-ivory": "#F8F6F2",
+            "zina-taupe": "#B7B0A5",
+          },
+          fontFamily: {
+            display: ["Manrope", "sans-serif"],
+            serif: ["Playfair Display", "serif"],
+          },
+        },
+      },
+    };
+  </script>
+  
+  <style>
+    body { font-family: 'Manrope', sans-serif; }
+    .serif-text { font-family: 'Playfair Display', serif; }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+
+<div id="header-container"></div>
+
+<main class="py-12 px-6 max-w-7xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-12">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 space-y-8">
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5">
+        <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <span class="material-icons-outlined text-4xl text-primary">person</span>
+        </div>
+        <div class="text-center">
+          <h2 id="profile-name" class="font-bold text-lg">Chargement...</h2>
+          <p id="profile-email" class="text-sm text-zinc-500">...</p>
+        </div>
+      </div>
+      
+      <nav class="space-y-2">
+        <button onclick="showSection('orders')" class="w-full text-left px-6 py-3 rounded-xl bg-primary text-white font-medium flex items-center gap-3 transition-all shadow-lg shadow-primary/20">
+          <span class="material-icons-outlined">shopping_bag</span>
+          Mes Commandes
+        </button>
+        <button onclick="handleLogout()" class="w-full text-left px-6 py-3 rounded-xl hover:bg-red-50 text-red-500 font-medium flex items-center gap-3 transition-all mt-12">
+          <span class="material-icons-outlined">logout</span>
+          Déconnexion
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <section class="flex-grow">
+      <div id="orders-section" class="space-y-8">
+        <div class="flex items-center justify-between">
+          <h1 class="text-3xl serif-text">Historique des commandes</h1>
+          <span id="order-count" class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-bold">0 commandes</span>
+        </div>
+        
+        <div id="orders-list" class="grid gap-6">
+          <!-- Orders injected here -->
+          <div class="text-center py-20 bg-white dark:bg-zinc-900 rounded-2xl border border-dashed border-primary/20">
+            <p class="text-zinc-400">Vous n'avez pas encore passé de commande.</p>
+            <a href="/shop.html" class="inline-block mt-4 text-primary font-bold border-b border-primary">Boutique →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<!-- JavaScript -->
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!Auth.isLoggedIn()) {
+      window.location.href = '/auth/login.html';
+      return;
+    }
+
+    const user = Auth.getCurrentUser();
+    document.getElementById('profile-name').textContent = user.name;
+    document.getElementById('profile-email').textContent = user.email;
+
+    renderOrders();
+  });
+
+  function renderOrders() {
+    const user = Auth.getCurrentUser();
+    const orders = Orders.getByUserId(user.id);
+    const container = document.getElementById('orders-list');
+    const countBadge = document.getElementById('order-count');
+
+    countBadge.textContent = `${orders.length} commande${orders.length > 1 ? 's' : ''}`;
+
+    if (orders.length === 0) return;
+
+    container.innerHTML = orders.reverse().map(order => `
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5 hover:border-primary/20 transition-all group">
+        <div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
+          <div>
+            <span class="text-xs font-bold tracking-widest uppercase text-primary mb-1 block">Commande #${order.id}</span>
+            <p class="text-sm text-zinc-500">${Orders.formatDate(order.date)}</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="text-right">
+              <p class="text-sm font-bold">${Cart.formatPrice(order.total)}</p>
+              <p class="text-xs text-zinc-400">${order.items.length} article${order.items.length > 1 ? 's' : ''}</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getStatusClass(order.status)}">
+              ${getStatusLabel(order.status)}
+            </span>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 border-t border-primary/5 pt-6">
+          ${order.items.map(item => `
+            <div class="aspect-square rounded-lg overflow-hidden bg-zinc-100">
+              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function getStatusClass(status) {
+    switch(status) {
+      case 'pending': return 'bg-amber-100 text-amber-600';
+      case 'processing': return 'bg-blue-100 text-blue-600';
+      case 'completed': return 'bg-emerald-100 text-emerald-600';
+      case 'cancelled': return 'bg-red-100 text-red-600';
+      default: return 'bg-zinc-100 text-zinc-600';
+    }
+  }
+
+  function getStatusLabel(status) {
+    switch(status) {
+      case 'pending': return 'En attente';
+      case 'processing': return 'En cours';
+      case 'completed': return 'Terminée';
+      case 'cancelled': return 'Annulée';
+      default: return status;
+    }
+  }
+
+  function handleLogout() {
+    Auth.logout();
+    window.location.href = '/index.html';
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commandes - ZINA Admin</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "zina-black": "#0F0F0F",
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+
+<main class="py-12 px-6 max-w-7xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-12">
+    <!-- Admin Sidebar -->
+    <aside class="w-full md:w-64 space-y-8">
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5">
+        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <span class="material-icons-outlined text-3xl text-primary">shopping_cart</span>
+        </div>
+        <div class="text-center">
+          <h2 class="font-bold text-lg">Commandes</h2>
+          <p class="text-[10px] tracking-widest uppercase opacity-40">Gestion Ventes</p>
+        </div>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="/admin/dashboard.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">dashboard</span>
+          Tableau de bord
+        </a>
+        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">inventory_2</span>
+          Produits
+        </a>
+        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl bg-primary text-white font-medium flex items-center gap-3 transition-all shadow-lg shadow-primary/20">
+          <span class="material-icons-outlined">shopping_cart</span>
+          Commandes
+        </a>
+        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">email</span>
+          Messages
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <section class="flex-grow space-y-12">
+      <h1 class="text-4xl serif-text">Toutes les commandes</h1>
+
+      <!-- Orders List -->
+      <div id="orders-list" class="grid gap-6">
+        <!-- Orders injected here -->
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/admin.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  Auth.requireAdmin();
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    renderAdminOrders();
+  });
+
+  function renderAdminOrders() {
+    const orders = Orders.getAll().reverse();
+    const container = document.getElementById('orders-list');
+    
+    if (orders.length === 0) {
+      container.innerHTML = '<div class="p-20 text-center bg-white rounded-3xl border border-dashed border-primary/20 text-zinc-400">Aucune commande enregistrée.</div>';
+      return;
+    }
+
+    container.innerHTML = orders.map(order => `
+      <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-primary/5 shadow-sm hover:border-primary/20 transition-all space-y-6">
+        <div class="flex flex-col md:flex-row justify-between gap-6">
+          <div class="flex gap-4">
+            <div class="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center font-bold text-primary text-sm">
+              #${order.id}
+            </div>
+            <div>
+              <p class="font-bold text-lg">${order.shipping?.fullName || 'Client Anonyme'}</p>
+              <p class="text-xs text-zinc-400 font-light italic">${order.shipping?.email || 'Pas d\'email'}</p>
+              <p class="text-[10px] uppercase tracking-widest text-zinc-500 mt-1">${Orders.formatDate(order.date)}</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-6">
+            <div class="text-right">
+              <p class="text-xl font-bold text-primary">${Cart.formatPrice(order.total)}</p>
+              <select onchange="updateOrderStatus(${order.id}, this.value)" class="mt-2 text-[10px] font-black uppercase tracking-widest border-b border-primary/20 bg-transparent outline-none cursor-pointer hover:border-primary transition-colors">
+                <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>En attente</option>
+                <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>En cours</option>
+                <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Terminée</option>
+                <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Annulée</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4 pt-6 border-t border-primary/5">
+          ${order.items.map(item => `
+            <div class="group relative aspect-square rounded-xl overflow-hidden bg-primary/5 border border-primary/5">
+              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="text-white font-bold text-[10px]">x${item.quantity}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div class="bg-primary/5 p-4 rounded-2xl flex items-center gap-4">
+          <span class="material-icons-outlined text-primary text-sm">location_on</span>
+          <p class="text-xs text-zinc-600">${order.shipping?.address}, ${order.shipping?.city} (${order.shipping?.phone})</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.updateOrderStatus = (id, newStatus) => {
+    const orders = Orders.getAll();
+    const index = orders.findIndex(o => o.id === id);
+    if (index !== -1) {
+      orders[index].status = newStatus;
+      Storage.set(Storage.KEYS.ORDERS, orders);
+      App.showAlert('Statut mis à jour !', 'success');
+      renderAdminOrders();
+    }
+  };
+</script>
+</body>
+</html>

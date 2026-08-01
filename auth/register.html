@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S'inscrire - ZINA</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/base.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="header-container"></div>
+  <main>
+    <div class="auth-container">
+      <div class="auth-box">
+        <h1>Créer un compte</h1>
+        <p class="auth-subtitle">Rejoignez la famille ZINA</p>
+
+        <form id="register-form">
+          <div class="form-group">
+            <label>Nom complet</label>
+            <input type="text" name="name" required>
+          </div>
+
+          <div class="form-group">
+            <label>Adresse e-mail</label>
+            <input type="email" name="email" required>
+          </div>
+
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" name="password" required minlength="6">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;">
+            Créer un compte
+          </button>
+        </form>
+
+        <div class="auth-divider">OU</div>
+
+        <p class="auth-link">
+          Déjà un compte ?
+          <a href="/auth/login.html">Se connecter</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/storage.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/shared-components.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const regForm = document.getElementById('register-form');
+      if (regForm) {
+        regForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const formData = new FormData(regForm);
+          const result = Auth.register(formData.get('name'), formData.get('email'), formData.get('password'));
+          
+          if (result.success) {
+            App.showAlert('Compte créé avec succès !', 'success');
+            setTimeout(() => {
+              window.location.replace('/index.html');
+            }, 800);
+          } else {
+            App.showAlert(result.message, 'error');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
