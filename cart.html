@@ -74,50 +74,117 @@
         const cartItems = Cart.getItems();
         const container = document.getElementById('cart-content');
         
-if (cartItems.length === 0) {
-  container.innerHTML = `
-    <div class="empty-cart">
-      <div class="empty-cart-icon">🛒</div>
-      <h2>Votre panier est vide</h2>
-      <p>Découvrez notre magnifique collection</p>
-      <a href="/shop.html" class="btn btn-primary">Commencer vos achats</a>
-    </div>
-  `;
-  return;
-}
-
-        
-        container.innerHTML = `
-          <div class="cart-items">
-            ${cartItems.map(item => `
-              <div class="cart-item">
-                <img src="${item.image}" alt="${item.name}" class="cart-item-image">
-                <div class="cart-item-info">
-                  <div class="cart-item-name">${item.name}</div>
-                  <div class="cart-item-price">${Cart.formatPrice(item.price)}</div>
-                  <div class="quantity-controls">
-                    <button class="quantity-btn" onclick="updateQty(${item.productId}, ${item.quantity - 1})">-</button>
-                    <span class="quantity-value">${item.quantity}</span>
-                    <button class="quantity-btn" onclick="updateQty(${item.productId}, ${item.quantity + 1})">+</button>
-                  </div>
-                  <button class="remove-btn" onclick="removeItem(${item.productId})">Remove</button>
-                </div>
-                <div style="font-weight:600;color:var(--color-gold);">${Cart.formatPrice(item.price * item.quantity)}</div>
+        if (cartItems.length === 0) {
+          container.className = "w-full max-w-2xl mx-auto px-6";
+          container.innerHTML = `
+            <div class="text-center py-20 bg-white dark:bg-zinc-900 rounded-3xl border border-primary/10 shadow-sm p-8 max-w-xl mx-auto space-y-6">
+              <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary">
+                <span class="material-icons-outlined text-4xl">shopping_bag</span>
               </div>
-            `).join('')}
+              <h2 class="text-2xl serif-text font-medium text-zinc-900 dark:text-zinc-100">Votre panier est vide</h2>
+              <p class="text-zinc-500 text-sm max-w-sm mx-auto">Laissez-vous tenter par l'éclat de nos collections exclusives et trouvez la création ZINA idéale.</p>
+              <a href="/shop.html" class="inline-block bg-primary hover:bg-primary/95 text-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all cursor-pointer shadow-md">
+                Découvrir la Collection
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        container.className = "cart-layout w-full max-w-6xl";
+        container.innerHTML = `
+          <!-- Left side: Items List -->
+          <div class="space-y-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Vos Articles (${cartItems.length})</h2>
+            
+            <div class="space-y-4">
+              ${cartItems.map(item => `
+                <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 hover:border-primary/20 transition-all duration-300 flex flex-col sm:flex-row items-center gap-6 shadow-sm group">
+                  <!-- Item Image -->
+                  <div class="w-24 h-24 rounded-xl overflow-hidden bg-zinc-50 flex-shrink-0 border border-primary/5">
+                    <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                  </div>
+                  
+                  <!-- Item Info -->
+                  <div class="flex-grow space-y-1 text-center sm:text-left">
+                    <h3 class="serif-text font-bold text-lg text-zinc-900 dark:text-zinc-100">${item.name}</h3>
+                    <p class="text-xs text-zinc-400 capitalize">Catégorie: ${item.category || 'Bijoux'}</p>
+                    <p class="text-sm font-semibold text-primary mt-1">${Cart.formatPrice(item.price)}</p>
+                  </div>
+                  
+                  <!-- Quantity Controls -->
+                  <div class="flex items-center gap-4">
+                    <div class="flex items-center border border-zinc-200 dark:border-zinc-800 rounded-full bg-zinc-50/50 p-1">
+                      <button onclick="updateQty(${item.productId}, ${item.quantity - 1})" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white hover:shadow-sm text-zinc-600 dark:text-zinc-300 transition-all cursor-pointer font-bold text-sm">-</button>
+                      <span class="w-8 text-center text-sm font-bold text-zinc-800 dark:text-zinc-200">${item.quantity}</span>
+                      <button onclick="updateQty(${item.productId}, ${item.quantity + 1})" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white hover:shadow-sm text-zinc-600 dark:text-zinc-300 transition-all cursor-pointer font-bold text-sm">+</button>
+                    </div>
+                  </div>
+
+                  <!-- Total Price & Actions -->
+                  <div class="flex flex-col items-center sm:items-end gap-2 min-w-[100px]">
+                    <span class="text-base font-bold text-primary">${Cart.formatPrice(item.price * item.quantity)}</span>
+                    <button onclick="removeItem(${item.productId})" class="text-xs text-red-500 hover:text-red-600 font-medium flex items-center gap-1 hover:underline cursor-pointer">
+                      <span class="material-icons-outlined text-sm">delete</span>
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
           </div>
-          <div class="cart-summary">
-            <h3>Order Summary</h3>
-            <div class="summary-row"><span>Subtotal</span><span class="amount">${Cart.formatPrice(Cart.getTotal())}</span></div>
-            <div class="summary-row"><span>Shipping</span><span class="amount">Free</span></div>
-            <div class="summary-row total"><span>Total</span><span class="amount">${Cart.formatPrice(Cart.getTotal())}</span></div>
-            <a href="/checkout.html" class="btn btn-primary" style="width:100%;margin-top:1rem;">Proceed to Checkout</a>
+          
+          <!-- Right side: Summary -->
+          <div class="space-y-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Résumé de la commande</h2>
+            
+            <div class="bg-[#FAF9F6] dark:bg-zinc-900 p-8 rounded-2xl border border-primary/10 shadow-sm space-y-6 sticky top-24">
+              <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                  <span class="text-zinc-500">Sous-total</span>
+                  <span class="font-bold text-zinc-800 dark:text-zinc-200">${Cart.formatPrice(Cart.getTotal())}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-zinc-500">Livraison</span>
+                  <span class="font-bold text-emerald-600 uppercase text-xs tracking-wider">Gratuite</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-zinc-500">TVA (incluse)</span>
+                  <span class="font-bold text-zinc-400">0%</span>
+                </div>
+              </div>
+              
+              <div class="border-t border-primary/10 pt-4 flex justify-between items-center">
+                <span class="serif-text font-bold text-zinc-900 dark:text-zinc-100">Total</span>
+                <span class="text-xl font-bold text-primary">${Cart.formatPrice(Cart.getTotal())}</span>
+              </div>
+              
+              <a href="/checkout.html" class="block w-full text-center bg-primary hover:bg-primary/95 text-white py-4 rounded-full text-xs font-bold uppercase tracking-widest transition-all cursor-pointer shadow-md shadow-primary/10">
+                Passer la commande
+              </a>
+              
+              <!-- Trust guarantees -->
+              <div class="space-y-3 pt-6 border-t border-primary/5 text-[11px] text-zinc-500">
+                <div class="flex items-center gap-3">
+                  <span class="material-icons-outlined text-sm text-primary">lock</span>
+                  <span>Paiement 100% sécurisé</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="material-icons-outlined text-sm text-primary">local_shipping</span>
+                  <span>Livraison express offerte au Maroc</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="material-icons-outlined text-sm text-primary">history</span>
+                  <span>Retours gratuits sous 14 jours</span>
+                </div>
+              </div>
+            </div>
           </div>
         `;
       }
       
-      window.updateQty = (productId, newQty) => { Cart.updateQuantity(productId, newQty); renderCart(); };
-      window.removeItem = (productId) => { if (confirm('Remove this item?')) { Cart.removeItem(productId); renderCart(); } };
+      window.updateQty = (productId, newQty) => { if (newQty < 1) return; Cart.updateQuantity(productId, newQty); renderCart(); };
+      window.removeItem = (productId) => { if (confirm('Voulez-vous supprimer cet article du panier ?')) { Cart.removeItem(productId); renderCart(); } };
     });
   </script>
   <script src="/assets/js/shared-components.js"></script>

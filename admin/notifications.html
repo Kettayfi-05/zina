@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications - ZINA Admin</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "zina-black": "#0F0F0F",
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+
+<main class="py-12 px-6 max-w-7xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-12">
+    <!-- Admin Sidebar -->
+    <aside class="w-full md:w-64 space-y-8">
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5">
+        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <span class="material-icons-outlined text-3xl text-primary">notifications</span>
+        </div>
+        <div class="text-center">
+          <h2 class="font-bold text-lg">Notifications</h2>
+          <p class="text-[10px] tracking-widest uppercase opacity-40">Système & Alertes</p>
+        </div>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="/admin/dashboard.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">dashboard</span>
+          Tableau de bord
+        </a>
+        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">inventory_2</span>
+          Produits
+        </a>
+        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">shopping_cart</span>
+          Commandes
+        </a>
+        <a href="/admin/clients.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">people</span>
+          Clients
+        </a>
+        <a href="/admin/reviews.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">rate_review</span>
+          Avis
+        </a>
+        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">email</span>
+          Messages
+        </a>
+        <a href="/admin/chatbot.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">psychology</span>
+          Entraîner le Bot
+        </a>
+        <button onclick="Auth.logout(); window.location.href='/index.html';" class="w-full text-left px-6 py-3 rounded-xl hover:bg-red-50 text-red-500 font-medium flex items-center gap-3 transition-all mt-12">
+          <span class="material-icons-outlined">logout</span>
+          Déconnexion
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <section class="flex-grow space-y-8">
+      <div>
+        <h1 class="text-4xl serif-text">Système de notifications</h1>
+        <p class="text-zinc-500 font-light">Envoyez et gérez les notifications diffusées sur le site</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Send Notification Form (1 col) -->
+        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm space-y-6">
+          <h2 class="text-lg font-bold">Diffuser une notification</h2>
+          
+          <form id="notif-form" onsubmit="sendNotification(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Titre</label>
+              <input type="text" id="notif-title" required placeholder="ex: Offre Exclusive ✨" class="w-full p-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Message</label>
+              <textarea id="notif-message" required rows="3" placeholder="ex: Profitez de -20% sur la collection Beldi ce week-end..." class="w-full p-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Type</label>
+              <select id="notif-type" class="w-full p-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm">
+                <option value="info">Information (Bleu)</option>
+                <option value="success">Succès (Vert)</option>
+                <option value="warning">Alerte (Jaune)</option>
+                <option value="order">Commande (Or)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Destinataire</label>
+              <select id="notif-recipient" class="w-full p-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm">
+                <option value="all">Tous les utilisateurs</option>
+                <option value="admin">Administrateurs uniquement</option>
+                <optgroup label="Clients spécifiques" id="recipients-clients">
+                  <!-- Clients injected here -->
+                </optgroup>
+              </select>
+            </div>
+            <button type="submit" class="w-full bg-primary hover:bg-primary/95 text-white py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all cursor-pointer">
+              Envoyer la notification
+            </button>
+          </form>
+        </div>
+
+        <!-- History (2 cols) -->
+        <div class="lg:col-span-2 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm space-y-6">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-bold">Historique des notifications</h2>
+            <button onclick="clearAllNotifications()" class="text-xs text-red-500 hover:text-red-600 font-medium hover:underline cursor-pointer">
+              Tout effacer
+            </button>
+          </div>
+          
+          <div id="notif-list" class="divide-y divide-primary/5 max-h-[500px] overflow-y-auto pr-2 space-y-4">
+            <!-- Notifications Injected Dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/notifications.js"></script>
+<script src="/assets/js/admin.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  Auth.requireAdmin();
+
+  document.addEventListener('DOMContentLoaded', () => {
+    populateRecipients();
+    renderNotifications();
+  });
+
+  function populateRecipients() {
+    const users = Storage.get(Storage.KEYS.USERS) || [];
+    const selectGroup = document.getElementById('recipients-clients');
+    
+    const clients = users.filter(u => u.role === 'client');
+    selectGroup.innerHTML = clients.map(c => `
+      <option value="user_${c.id}">${c.name} (${c.email})</option>
+    `).join('');
+  }
+
+  function renderNotifications() {
+    if (typeof Notifications === 'undefined') return;
+    
+    const all = Notifications.getAll().sort((a, b) => new Date(b.date) - new Date(a.date));
+    const container = document.getElementById('notif-list');
+    
+    if (all.length === 0) {
+      container.innerHTML = `
+        <div class="py-8 text-center text-zinc-400 text-sm">Aucune notification enregistrée.</div>
+      `;
+      return;
+    }
+
+    container.innerHTML = all.map(n => {
+      let icon = 'info';
+      let colorClass = 'text-blue-500 bg-blue-50';
+      if (n.type === 'success') { icon = 'check_circle'; colorClass = 'text-emerald-500 bg-emerald-50'; }
+      else if (n.type === 'warning') { icon = 'warning'; colorClass = 'text-amber-500 bg-amber-50'; }
+      else if (n.type === 'order') { icon = 'shopping_bag'; colorClass = 'text-primary bg-primary/5'; }
+      else if (n.type === 'message') { icon = 'email'; colorClass = 'text-purple-500 bg-purple-50'; }
+
+      let destLabel = 'Tous';
+      if (n.recipientRole === 'admin') destLabel = 'Admins';
+      else if (n.recipientRole === 'client') {
+        if (n.userId) {
+          const users = Storage.get(Storage.KEYS.USERS) || [];
+          const u = users.find(x => x.id === n.userId);
+          destLabel = u ? `Client: ${u.name}` : `ID Client: ${n.userId}`;
+        } else {
+          destLabel = 'Clients';
+        }
+      }
+
+      return `
+        <div class="py-4 flex gap-4 items-start group">
+          <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center ${colorClass}">
+            <span class="material-icons-outlined text-base">${icon}</span>
+          </div>
+          <div class="flex-grow space-y-1">
+            <div class="flex justify-between items-start gap-4">
+              <h3 class="text-sm font-bold text-zinc-800 dark:text-zinc-200 leading-snug">${n.title}</h3>
+              <span class="text-[9px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">${destLabel}</span>
+            </div>
+            <p class="text-xs text-zinc-500 leading-relaxed">${n.message}</p>
+            <p class="text-[9px] text-zinc-350">${new Date(n.date).toLocaleString('fr-FR')}</p>
+          </div>
+          <button onclick="deleteNotification(${n.id})" class="p-1 text-zinc-300 hover:text-red-500 rounded-full hover:bg-zinc-50 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer">
+            <span class="material-icons-outlined text-sm">delete</span>
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function sendNotification(event) {
+    event.preventDefault();
+    const title = document.getElementById('notif-title').value.trim();
+    const message = document.getElementById('notif-message').value.trim();
+    const type = document.getElementById('notif-type').value;
+    const recipientVal = document.getElementById('notif-recipient').value;
+
+    let recipientRole = 'all';
+    let userId = null;
+
+    if (recipientVal === 'admin') {
+      recipientRole = 'admin';
+    } else if (recipientVal.startsWith('user_')) {
+      recipientRole = 'client';
+      userId = parseInt(recipientVal.replace('user_', ''));
+    }
+
+    if (typeof Notifications !== 'undefined') {
+      Notifications.add(title, message, type, recipientRole, userId);
+      
+      // Clear form
+      document.getElementById('notif-form').reset();
+      renderNotifications();
+      
+      // Update UI Header
+      SharedComponents.updateNotificationsUI();
+    }
+  }
+
+  function deleteNotification(id) {
+    if (typeof Notifications !== 'undefined') {
+      let all = Notifications.getAll();
+      all = all.filter(n => n.id !== id);
+      Notifications.setAll(all);
+      renderNotifications();
+      SharedComponents.updateNotificationsUI();
+    }
+  }
+
+  function clearAllNotifications() {
+    if (confirm('Voulez-vous vraiment effacer toutes les notifications ?') && typeof Notifications !== 'undefined') {
+      Notifications.setAll([]);
+      renderNotifications();
+      SharedComponents.updateNotificationsUI();
+    }
+  }
+</script>
+</body>
+</html>

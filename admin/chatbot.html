@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entraînement Chatbot - ZINA</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "zina-black": "#0F0F0F",
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background-light text-zina-black transition-colors duration-300">
+<div id="header-container"></div>
+
+<main class="py-12 px-6 max-w-7xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-12">
+    <!-- Admin Sidebar -->
+    <aside class="w-full md:w-64 space-y-8">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-primary/5">
+        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <span class="material-icons-outlined text-3xl text-primary">admin_panel_settings</span>
+        </div>
+        <div class="text-center">
+          <h2 class="font-bold text-lg">Administration</h2>
+          <p class="text-[10px] tracking-widest uppercase opacity-40">ZINA Luxury</p>
+        </div>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="/admin/dashboard.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">dashboard</span>
+          Tableau de bord
+        </a>
+        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">inventory_2</span>
+          Produits
+        </a>
+        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">shopping_cart</span>
+          Commandes
+        </a>
+        <a href="/admin/clients.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">people</span>
+          Clients
+        </a>
+        <a href="/admin/reviews.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">rate_review</span>
+          Avis
+        </a>
+        <a href="/admin/notifications.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">notifications</span>
+          Notifications
+        </a>
+        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">email</span>
+          Messages
+        </a>
+        <a href="/admin/chatbot.html" class="w-full text-left px-6 py-3 rounded-xl bg-primary text-white font-medium flex items-center gap-3 transition-all shadow-lg shadow-primary/20">
+          <span class="material-icons-outlined">psychology</span>
+          Entraîner le Bot
+        </a>
+        <button onclick="handleLogout()" class="w-full text-left px-6 py-3 rounded-xl hover:bg-red-50 text-red-500 font-medium flex items-center gap-3 transition-all mt-12">
+          <span class="material-icons-outlined">logout</span>
+          Déconnexion
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Admin Content -->
+    <section class="flex-grow space-y-12">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl serif-text">Entraînement de l'IA</h1>
+          <p class="text-zinc-500 font-light">Personnalisez les réponses et le message d'accueil de votre Concierge virtuel</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Configuration Forms -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- Greeting Message Form -->
+          <div class="bg-white p-8 rounded-3xl border border-primary/10 shadow-sm space-y-6">
+            <h2 class="text-lg font-bold flex items-center gap-2">
+              <span class="material-icons-outlined text-primary">chat_bubble_outline</span>
+              Message d'accueil du Bot
+            </h2>
+            <form id="greeting-form" onsubmit="saveGreeting(event)" class="space-y-4">
+              <div class="form-group">
+                <label class="block text-xs font-bold uppercase mb-2">Formule de bienvenue</label>
+                <textarea id="ai-greeting" class="w-full p-4 border border-zinc-200 rounded-xl focus:border-primary focus:ring-0 text-sm h-24" required></textarea>
+              </div>
+              <button type="submit" class="bg-primary text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-primary/95 transition-all cursor-pointer">
+                Enregistrer le message
+              </button>
+            </form>
+          </div>
+
+          <!-- Add Rule Form -->
+          <div class="bg-white p-8 rounded-3xl border border-primary/10 shadow-sm space-y-6">
+            <h2 class="text-lg font-bold flex items-center gap-2">
+              <span class="material-icons-outlined text-primary">add_circle_outline</span>
+              Ajouter une règle de connaissance (FAQ)
+            </h2>
+            <form id="rule-form" onsubmit="addRule(event)" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="form-group sm:col-span-1">
+                  <label class="block text-xs font-bold uppercase mb-2">Mot-clé déclencheur</label>
+                  <input type="text" id="rule-keyword" placeholder="ex: livraison" class="w-full p-3 border border-zinc-200 rounded-xl focus:border-primary focus:ring-0 text-sm" required />
+                </div>
+                <div class="form-group sm:col-span-2">
+                  <label class="block text-xs font-bold uppercase mb-2">Réponse du Chatbot</label>
+                  <input type="text" id="rule-response" placeholder="ex: Nous livrons gratuitement au Maroc sous 2-4 jours." class="w-full p-3 border border-zinc-200 rounded-xl focus:border-primary focus:ring-0 text-sm" required />
+                </div>
+              </div>
+              <button type="submit" class="bg-primary text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-primary/95 transition-all cursor-pointer">
+                Ajouter la règle
+              </button>
+            </form>
+          </div>
+
+          <!-- Existing Rules Table -->
+          <div class="bg-white p-8 rounded-3xl border border-primary/10 shadow-sm space-y-6">
+            <h2 class="text-lg font-bold flex items-center gap-2">
+              <span class="material-icons-outlined text-primary">list_alt</span>
+              Règles d'entraînement configurées
+            </h2>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-primary/10 text-xs font-bold uppercase text-zinc-400">
+                    <th class="py-4 px-4">Mot-clé</th>
+                    <th class="py-4 px-4">Réponse personnalisée</th>
+                    <th class="py-4 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rules-table-body" class="text-xs">
+                  <!-- Rules Injected Dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Chatbot Testing Sandbox -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-3xl border border-primary/10 shadow-xl overflow-hidden flex flex-col h-[580px] sticky top-6">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-primary to-[#d8b673] p-4 text-white">
+              <h4 class="font-bold text-sm">Zone de Test IA</h4>
+              <p class="text-[9px] opacity-75 uppercase tracking-widest">Tester vos modifications ici</p>
+            </div>
+            
+            <!-- Sandbox Chat History -->
+            <div id="sandbox-messages" class="flex-grow p-4 overflow-y-auto space-y-4 bg-zinc-50">
+              <!-- Messages injected here -->
+            </div>
+
+            <!-- Sandbox Form -->
+            <form id="sandbox-form" onsubmit="sendSandboxMessage(event)" class="p-3 border-t border-primary/10 bg-white flex items-center gap-2">
+              <input
+                id="sandbox-input"
+                type="text"
+                placeholder="Discuter avec le bot..."
+                class="flex-grow bg-zinc-50 border border-zinc-200 focus:outline-none focus:border-primary px-4 py-2 rounded-full text-xs"
+                required
+                autocomplete="off"
+              />
+              <button type="submit" class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/95 transition-colors cursor-pointer">
+                <span class="material-icons-outlined text-sm">send</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<!-- JavaScript -->
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  let aiConfig = {};
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Security check
+    if (!Auth.isLoggedIn() || Auth.getCurrentUser().role !== 'admin') {
+      window.location.href = '/auth/login.html';
+      return;
+    }
+
+    loadConfig();
+    initSandbox();
+  });
+
+  function loadConfig() {
+    aiConfig = Storage.get('zina_ai_config') || { greeting: '', rules: [] };
+    
+    // Set greeting input
+    document.getElementById('ai-greeting').value = aiConfig.greeting;
+    
+    // Render rules table
+    renderRulesTable();
+  }
+
+  function renderRulesTable() {
+    const tbody = document.getElementById('rules-table-body');
+    if (!tbody) return;
+
+    if (aiConfig.rules.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="3" class="py-8 text-center text-zinc-400">Aucune règle personnalisée configurée.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = aiConfig.rules.map(rule => `
+      <tr class="border-b border-primary/5 hover:bg-zinc-50 transition-colors">
+        <td class="py-4 px-4 font-bold text-primary">${rule.keyword}</td>
+        <td class="py-4 px-4 max-w-xs truncate" title="${rule.response}">${rule.response}</td>
+        <td class="py-4 px-4 text-right">
+          <button onclick="deleteRule(${rule.id})" class="text-red-500 hover:text-red-700 p-1">
+            <span class="material-icons-outlined text-lg">delete</span>
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function saveGreeting(e) {
+    e.preventDefault();
+    const greetingText = document.getElementById('ai-greeting').value.trim();
+    if (!greetingText) return;
+
+    aiConfig.greeting = greetingText;
+    Storage.set('zina_ai_config', aiConfig);
+    
+    App.showAlert('Message d’accueil mis à jour !', 'success');
+    
+    // Restart sandbox to show new greeting
+    initSandbox();
+  }
+
+  function addRule(e) {
+    e.preventDefault();
+    const keywordInput = document.getElementById('rule-keyword');
+    const responseInput = document.getElementById('rule-response');
+    
+    const keyword = keywordInput.value.trim().toLowerCase();
+    const response = responseInput.value.trim();
+
+    if (!keyword || !response) return;
+
+    // Check if keyword already exists
+    const existingIndex = aiConfig.rules.findIndex(r => r.keyword === keyword);
+    if (existingIndex > -1) {
+      aiConfig.rules[existingIndex].response = response;
+    } else {
+      const newId = aiConfig.rules.length > 0 ? Math.max(...aiConfig.rules.map(r => r.id)) + 1 : 1;
+      aiConfig.rules.push({ id: newId, keyword, response });
+    }
+
+    Storage.set('zina_ai_config', aiConfig);
+    
+    keywordInput.value = '';
+    responseInput.value = '';
+    
+    renderRulesTable();
+    App.showAlert('Règle d’entraînement enregistrée !', 'success');
+  }
+
+  function deleteRule(id) {
+    aiConfig.rules = aiConfig.rules.filter(r => r.id !== id);
+    Storage.set('zina_ai_config', aiConfig);
+    renderRulesTable();
+    App.showAlert('Règle supprimée.', 'info');
+  }
+
+  // --- Sandbox logic ---
+  function initSandbox() {
+    const sandbox = document.getElementById('sandbox-messages');
+    if (!sandbox) return;
+
+    sandbox.innerHTML = '';
+    addSandboxMessage(aiConfig.greeting, 'agent');
+  }
+
+  function addSandboxMessage(text, sender) {
+    const container = document.getElementById('sandbox-messages');
+    if (!container) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+
+    const bubble = document.createElement('div');
+    bubble.className = `max-w-[85%] rounded-2xl px-4 py-2 text-[11px] shadow-sm leading-relaxed ${
+      sender === 'user'
+        ? 'bg-primary text-white rounded-br-none'
+        : 'bg-white border border-primary/10 text-zina-black rounded-bl-none'
+    }`;
+    bubble.innerHTML = text;
+
+    wrapper.appendChild(bubble);
+    container.appendChild(wrapper);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function sendSandboxMessage(e) {
+    e.preventDefault();
+    const input = document.getElementById('sandbox-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    addSandboxMessage(text, 'user');
+    input.value = '';
+
+    // Mock AIAgent logic locally to display response in sandbox
+    setTimeout(() => {
+      const response = simulateAIResponse(text);
+      addSandboxMessage(response, 'agent');
+    }, 500);
+  }
+
+  function simulateAIResponse(query) {
+    query = query.toLowerCase();
+    
+    // Check local customized rules
+    const rules = aiConfig.rules || [];
+    for (const rule of rules) {
+      if (query.includes(rule.keyword)) {
+        return rule.response;
+      }
+    }
+
+    // Default static fallbacks for sandbox testing
+    if (query.includes('bonjour') || query.includes('salut')) {
+      return "Bonjour ! Je suis ZINA, votre concierge virtuel. Comment puis-je vous guider ?";
+    }
+    if (query.includes('bague')) {
+      return "Voici notre recommandation pour les bagues : **Luna d'Or** (1300 Dhs) et **Zayna Élégance** (2300 Dhs).";
+    }
+    if (query.includes('livraison')) {
+      return "La livraison est offerte au Maroc à partir de 1500 Dhs d'achat.";
+    }
+
+    return "Je ne dispose pas de règle spécifique pour ce message. Essayez d'ajouter ce mot-clé dans les règles de connaissances ci-contre !";
+  }
+
+  function handleLogout() {
+    Auth.logout();
+    window.location.href = '/index.html';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des Avis - ZINA Admin</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "zina-black": "#0F0F0F",
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+
+<main class="py-12 px-6 max-w-7xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-12">
+    <!-- Admin Sidebar -->
+    <aside class="w-full md:w-64 space-y-8">
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5">
+        <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <span class="material-icons-outlined text-3xl text-primary">rate_review</span>
+        </div>
+        <div class="text-center">
+          <h2 class="font-bold text-lg">Avis Clients</h2>
+          <p class="text-[10px] tracking-widest uppercase opacity-40">Modération des commentaires</p>
+        </div>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="/admin/dashboard.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">dashboard</span>
+          Tableau de bord
+        </a>
+        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">inventory_2</span>
+          Produits
+        </a>
+        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">shopping_cart</span>
+          Commandes
+        </a>
+        <a href="/admin/clients.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">people</span>
+          Clients
+        </a>
+        <a href="/admin/reviews.html" class="w-full text-left px-6 py-3 rounded-xl bg-primary text-white font-medium flex items-center gap-3 transition-all shadow-lg shadow-primary/20">
+          <span class="material-icons-outlined">rate_review</span>
+          Avis
+        </a>
+        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">email</span>
+          Messages
+        </a>
+        <a href="/admin/chatbot.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">psychology</span>
+          Entraîner le Bot
+        </a>
+        <button onclick="Auth.logout(); window.location.href='/index.html';" class="w-full text-left px-6 py-3 rounded-xl hover:bg-red-50 text-red-500 font-medium flex items-center gap-3 transition-all mt-12">
+          <span class="material-icons-outlined">logout</span>
+          Déconnexion
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <section class="flex-grow space-y-8">
+      <div>
+        <h1 class="text-4xl serif-text">Modération des avis</h1>
+        <p class="text-zinc-500 font-light">Approuvez, rejetez ou supprimez les commentaires et notes clients</p>
+      </div>
+
+      <!-- Controls -->
+      <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-primary/5 flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-zinc-400 font-bold uppercase tracking-wider">Filtrer par :</span>
+          <select id="status-filter" onchange="renderReviews()" class="p-2 border border-zinc-250 dark:border-zinc-800 rounded-xl bg-transparent text-xs focus:border-primary focus:ring-0">
+            <option value="all">Tous les avis</option>
+            <option value="pending">En attente d'approbation</option>
+            <option value="approved">Approuvés</option>
+          </select>
+        </div>
+        <div class="text-xs text-zinc-400 font-medium" id="reviews-count"></div>
+      </div>
+
+      <!-- Reviews list -->
+      <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-primary/5 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-primary/5 text-zinc-400 text-[10px] font-bold uppercase tracking-widest">
+                <th class="p-4 pl-6">Produit</th>
+                <th class="p-4">Client</th>
+                <th class="p-4">Note</th>
+                <th class="p-4">Commentaire</th>
+                <th class="p-4">Date</th>
+                <th class="p-4">Statut</th>
+                <th class="p-4 pr-6 text-right font-medium">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="reviews-table-body" class="divide-y divide-primary/5 text-sm">
+              <!-- Reviews Injected Dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/admin.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  Auth.requireAdmin();
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderReviews();
+  });
+
+  function renderReviews() {
+    const reviews = Storage.get(Storage.KEYS.REVIEWS) || [];
+    const filter = document.getElementById('status-filter').value;
+    const tableBody = document.getElementById('reviews-table-body');
+    const reviewsCount = document.getElementById('reviews-count');
+
+    let filtered = reviews;
+    if (filter === 'pending') {
+      filtered = reviews.filter(r => !r.approved);
+    } else if (filter === 'approved') {
+      filtered = reviews.filter(r => r.approved);
+    }
+
+    // Sort newest first
+    filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    reviewsCount.textContent = `${filtered.length} avis affiché${filtered.length > 1 ? 's' : ''}`;
+
+    if (filtered.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7" class="p-8 text-center text-zinc-400">Aucun avis trouvé.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    tableBody.innerHTML = filtered.map(r => `
+      <tr class="hover:bg-zinc-50/50 dark:hover:bg-zinc-850/50 transition-colors">
+        <td class="p-4 pl-6 font-bold text-zinc-800 dark:text-zinc-200">${r.productName}</td>
+        <td class="p-4 text-zinc-600">${r.userName}</td>
+        <td class="p-4 text-amber-500 font-bold flex items-center gap-0.5 mt-1.5">
+          ${renderStars(r.rating)}
+        </td>
+        <td class="p-4 text-zinc-500 max-w-xs truncate" title="${r.comment}">${r.comment}</td>
+        <td class="p-4 text-zinc-400 text-xs">${new Date(r.date).toLocaleDateString('fr-FR')}</td>
+        <td class="p-4">
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${r.approved ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+            ${r.approved ? 'Approuvé' : 'En attente'}
+          </span>
+        </td>
+        <td class="p-4 pr-6 text-right space-x-2 whitespace-nowrap">
+          <button onclick="toggleApprove(${r.id})" class="text-xs font-semibold text-primary hover:underline cursor-pointer">
+            ${r.approved ? 'Masquer' : 'Approuver'}
+          </button>
+          <button onclick="deleteReview(${r.id})" class="text-xs font-semibold text-red-500 hover:underline cursor-pointer">
+            Supprimer
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderStars(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+      stars += `<span class="material-icons-outlined text-sm">${i <= rating ? 'star' : 'star_border'}</span>`;
+    }
+    return stars;
+  }
+
+  function toggleApprove(id) {
+    const reviews = Storage.get(Storage.KEYS.REVIEWS) || [];
+    const review = reviews.find(r => r.id === id);
+    if (review) {
+      review.approved = !review.approved;
+      Storage.set(Storage.KEYS.REVIEWS, reviews);
+      renderReviews();
+    }
+  }
+
+  function deleteReview(id) {
+    if (confirm('Voulez-vous vraiment supprimer cet avis ?')) {
+      let reviews = Storage.get(Storage.KEYS.REVIEWS) || [];
+      reviews = reviews.filter(r => r.id !== id);
+      Storage.set(Storage.KEYS.REVIEWS, reviews);
+      renderReviews();
+    }
+  }
+</script>
+</body>
+</html>

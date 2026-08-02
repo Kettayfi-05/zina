@@ -68,6 +68,25 @@ const Orders = {
     orders.push(newOrder);
     Storage.set(Storage.KEYS.ORDERS, orders);
 
+    // Créer les notifications
+    if (typeof Notifications !== 'undefined') {
+      // Pour le client
+      Notifications.add(
+        'Commande validée',
+        `Votre commande #${newOrder.id} d'un montant de ${Cart.formatPrice(newOrder.total)} a été enregistrée avec succès.`,
+        'success',
+        'client',
+        user.id
+      );
+      // Pour l'admin
+      Notifications.add(
+        'Nouvelle commande reçue',
+        `Le client ${user.name} a passé la commande #${newOrder.id} pour un montant de ${Cart.formatPrice(newOrder.total)}.`,
+        'order',
+        'admin'
+      );
+    }
+
     // Clear cart after order
     Cart.clear();
 
@@ -87,6 +106,24 @@ const Orders = {
 
     order.status = status;
     Storage.set(Storage.KEYS.ORDERS, orders);
+
+    // Créer la notification pour le client
+    if (typeof Notifications !== 'undefined') {
+      let label = status;
+      if (status === 'pending') label = 'en attente';
+      else if (status === 'processing') label = 'en cours de préparation';
+      else if (status === 'completed') label = 'terminée (livrée)';
+      else if (status === 'cancelled') label = 'annulée';
+
+      Notifications.add(
+        `Statut de commande mis à jour`,
+        `Le statut de votre commande #${order.id} est désormais : ${label}.`,
+        status === 'completed' ? 'success' : status === 'cancelled' ? 'warning' : 'info',
+        'client',
+        order.userId
+      );
+    }
+
     return { success: true, order };
   },
 
@@ -192,6 +229,17 @@ const Messages = {
 
     messages.push(newMessage);
     Storage.set(Storage.KEYS.MESSAGES, messages);
+
+    // Créer la notification pour l'admin
+    if (typeof Notifications !== 'undefined') {
+      Notifications.add(
+        'Nouveau message de contact',
+        `Vous avez reçu un nouveau message de la part de ${newMessage.name} (${newMessage.email}) au sujet de : "${newMessage.subject}".`,
+        'message',
+        'admin'
+      );
+    }
+
     return { success: true, message: newMessage };
   },
 

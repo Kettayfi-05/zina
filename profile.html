@@ -9,6 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
 
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script>
@@ -56,34 +61,14 @@
         </div>
       </div>
       
-      <nav class="space-y-2">
-        <button onclick="showSection('orders')" class="w-full text-left px-6 py-3 rounded-xl bg-primary text-white font-medium flex items-center gap-3 transition-all shadow-lg shadow-primary/20">
-          <span class="material-icons-outlined">shopping_bag</span>
-          Mes Commandes
-        </button>
-        <button onclick="handleLogout()" class="w-full text-left px-6 py-3 rounded-xl hover:bg-red-50 text-red-500 font-medium flex items-center gap-3 transition-all mt-12">
-          <span class="material-icons-outlined">logout</span>
-          Déconnexion
-        </button>
+      <nav class="space-y-2" id="profile-nav">
+        <!-- Navigation injectée dynamiquement -->
       </nav>
     </aside>
 
     <!-- Content -->
-    <section class="flex-grow">
-      <div id="orders-section" class="space-y-8">
-        <div class="flex items-center justify-between">
-          <h1 class="text-3xl serif-text">Historique des commandes</h1>
-          <span id="order-count" class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-bold">0 commandes</span>
-        </div>
-        
-        <div id="orders-list" class="grid gap-6">
-          <!-- Orders injected here -->
-          <div class="text-center py-20 bg-white dark:bg-zinc-900 rounded-2xl border border-dashed border-primary/20">
-            <p class="text-zinc-400">Vous n'avez pas encore passé de commande.</p>
-            <a href="/shop.html" class="inline-block mt-4 text-primary font-bold border-b border-primary">Boutique →</a>
-          </div>
-        </div>
-      </div>
+    <section class="flex-grow" id="profile-content">
+      <!-- Contenu injecté dynamiquement -->
     </section>
   </div>
 </main>
@@ -110,46 +95,287 @@
     document.getElementById('profile-name').textContent = user.name;
     document.getElementById('profile-email').textContent = user.email;
 
-    renderOrders();
+    renderProfile();
   });
 
-  function renderOrders() {
+  let activeClientTab = 'profile';
+
+  function renderProfile() {
     const user = Auth.getCurrentUser();
-    const orders = Orders.getByUserId(user.id);
-    const container = document.getElementById('orders-list');
-    const countBadge = document.getElementById('order-count');
+    const navContainer = document.getElementById('profile-nav');
+    const contentContainer = document.getElementById('profile-content');
 
-    countBadge.textContent = `${orders.length} commande${orders.length > 1 ? 's' : ''}`;
+    if (user.role === 'admin') {
+      // 1. Render Admin Nav
+      navContainer.innerHTML = `
+        <a href="/admin/dashboard.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 text-zina-black dark:text-zina-ivory font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">dashboard</span>
+          Tableau de Bord
+        </a>
+        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 text-zina-black dark:text-zina-ivory font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">inventory_2</span>
+          Gérer les Produits
+        </a>
+        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 text-zina-black dark:text-zina-ivory font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">shopping_cart</span>
+          Gérer les Commandes
+        </a>
+        <a href="/admin/clients.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 text-zina-black dark:text-zina-ivory font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">people</span>
+          Gérer les Clients
+        </a>
+        <a href="/admin/reviews.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 text-zina-black dark:text-zina-ivory font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">rate_review</span>
+          Gérer les Avis
+        </a>
+        <a href="/admin/notifications.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 text-zina-black dark:text-zina-ivory font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">notifications</span>
+          Notifications
+        </a>
+        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 text-zina-black dark:text-zina-ivory font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">email</span>
+          Messages Reçus
+        </a>
+        <a href="/admin/chatbot.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 text-zina-black dark:text-zina-ivory font-medium flex items-center gap-3 transition-all">
+          <span class="material-icons-outlined">psychology</span>
+          Entraîner le Bot
+        </a>
+        <button class="w-full text-left px-6 py-3 rounded-xl bg-primary text-white font-medium flex items-center gap-3 transition-all shadow-lg shadow-primary/20">
+          <span class="material-icons-outlined">person</span>
+          Mon Profil
+        </button>
+        <button onclick="handleLogout()" class="w-full text-left px-6 py-3 rounded-xl hover:bg-red-50 text-red-500 font-medium flex items-center gap-3 transition-all mt-12">
+          <span class="material-icons-outlined">logout</span>
+          Déconnexion
+        </button>
+      `;
 
-    if (orders.length === 0) return;
-
-    container.innerHTML = orders.reverse().map(order => `
-      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5 hover:border-primary/20 transition-all group">
-        <div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
-          <div>
-            <span class="text-xs font-bold tracking-widest uppercase text-primary mb-1 block">Commande #${order.id}</span>
-            <p class="text-sm text-zinc-500">${Orders.formatDate(order.date)}</p>
+      // 2. Render Admin Profile Content
+      contentContainer.innerHTML = `
+        <div class="space-y-8">
+          <div class="flex items-center justify-between">
+            <h1 class="text-3xl serif-text">Mon Profil</h1>
+            <span class="bg-primary text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Administrateur</span>
           </div>
-          <div class="flex items-center gap-4">
-            <div class="text-right">
-              <p class="text-sm font-bold">${Cart.formatPrice(order.total)}</p>
-              <p class="text-xs text-zinc-400">${order.items.length} article${order.items.length > 1 ? 's' : ''}</p>
-            </div>
-            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getStatusClass(order.status)}">
-              ${getStatusLabel(order.status)}
-            </span>
+
+          <div class="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-primary/10 shadow-sm space-y-6">
+            <h2 class="text-lg font-bold">Informations personnelles</h2>
+            
+            <div id="profile-message" class="hidden p-4 rounded-xl text-sm font-medium"></div>
+
+            <form id="profile-form" onsubmit="updateProfile(event)" class="space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Nom complet</label>
+                  <input type="text" id="profile-input-name" value="${user.name}" class="w-full p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm" required />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Adresse email</label>
+                  <input type="email" value="${user.email}" class="w-full p-4 border border-zinc-100 dark:border-zinc-850 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed text-sm" disabled />
+                  <p class="text-[10px] text-zinc-400 mt-1">L'adresse email ne peut pas être modifiée.</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-primary/5">
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Nouveau mot de passe</label>
+                  <input type="password" id="profile-input-password" placeholder="Laisser vide pour conserver l'actuel" class="w-full p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm" autocomplete="new-password" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Confirmer le mot de passe</label>
+                  <input type="password" id="profile-input-confirm" placeholder="Laisser vide pour conserver l'actuel" class="w-full p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm" autocomplete="new-password" />
+                </div>
+              </div>
+
+              <button type="submit" class="bg-primary hover:bg-primary/95 text-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all cursor-pointer shadow-md">
+                Enregistrer les modifications
+              </button>
+            </form>
           </div>
         </div>
-        
-        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 border-t border-primary/5 pt-6">
-          ${order.items.map(item => `
-            <div class="aspect-square rounded-lg overflow-hidden bg-zinc-100">
-              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
-            </div>
-          `).join('')}
+      `;
+    } else {
+      renderClient();
+    }
+  }
+
+  function renderClient() {
+    const user = Auth.getCurrentUser();
+    const navContainer = document.getElementById('profile-nav');
+    const contentContainer = document.getElementById('profile-content');
+
+    // 1. Render Client Nav with active tab styles
+    navContainer.innerHTML = `
+      <button onclick="switchClientTab('profile')" class="w-full text-left px-6 py-3 rounded-xl font-medium flex items-center gap-3 transition-all ${activeClientTab === 'profile' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-primary/10 text-zina-black dark:text-zina-ivory'}">
+        <span class="material-icons-outlined">person</span>
+        Mon Profil
+      </button>
+      <button onclick="switchClientTab('orders')" class="w-full text-left px-6 py-3 rounded-xl font-medium flex items-center gap-3 transition-all ${activeClientTab === 'orders' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-primary/10 text-zina-black dark:text-zina-ivory'}">
+        <span class="material-icons-outlined">shopping_bag</span>
+        Mes Commandes
+      </button>
+      <button onclick="handleLogout()" class="w-full text-left px-6 py-3 rounded-xl hover:bg-red-50 text-red-500 font-medium flex items-center gap-3 transition-all mt-12">
+        <span class="material-icons-outlined">logout</span>
+        Déconnexion
+      </button>
+    `;
+
+    // 2. Render Client Content based on active tab
+    if (activeClientTab === 'profile') {
+      contentContainer.innerHTML = `
+        <div class="space-y-8">
+          <div class="flex items-center justify-between">
+            <h1 class="text-3xl serif-text">Mon Profil</h1>
+            <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Client</span>
+          </div>
+
+          <div class="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-primary/10 shadow-sm space-y-6">
+            <h2 class="text-lg font-bold">Informations personnelles</h2>
+            
+            <!-- Toast notification area -->
+            <div id="profile-message" class="hidden p-4 rounded-xl text-sm font-medium"></div>
+
+            <form id="profile-form" onsubmit="updateProfile(event)" class="space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Nom complet</label>
+                  <input type="text" id="profile-input-name" value="${user.name}" class="w-full p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm" required />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Adresse email</label>
+                  <input type="email" value="${user.email}" class="w-full p-4 border border-zinc-100 dark:border-zinc-850 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed text-sm" disabled />
+                  <p class="text-[10px] text-zinc-400 mt-1">L'adresse email ne peut pas être modifiée.</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-primary/5">
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Nouveau mot de passe</label>
+                  <input type="password" id="profile-input-password" placeholder="Laisser vide pour conserver l'actuel" class="w-full p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm" autocomplete="new-password" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase text-zinc-400 mb-2">Confirmer le mot de passe</label>
+                  <input type="password" id="profile-input-confirm" placeholder="Laisser vide pour conserver l'actuel" class="w-full p-4 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-transparent focus:border-primary focus:ring-0 text-sm" autocomplete="new-password" />
+                </div>
+              </div>
+
+              <button type="submit" class="bg-primary hover:bg-primary/95 text-white px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all cursor-pointer shadow-md">
+                Enregistrer les modifications
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    } else {
+      const orders = Orders.getByUserId(user.id);
+      
+      contentContainer.innerHTML = `
+        <div class="space-y-8">
+          <div class="flex items-center justify-between">
+            <h1 class="text-3xl serif-text">Historique des commandes</h1>
+            <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-bold">${orders.length} commande${orders.length > 1 ? 's' : ''}</span>
+          </div>
+          
+          <div class="grid gap-6" id="orders-list">
+            ${orders.length === 0 ? `
+              <div class="text-center py-20 bg-white dark:bg-zinc-900 rounded-2xl border border-dashed border-primary/20">
+                <p class="text-zinc-400">Vous n'avez pas encore passé de commande.</p>
+                <a href="/shop.html" class="inline-block mt-4 text-primary font-bold border-b border-primary">Boutique →</a>
+              </div>
+            ` : orders.reverse().map(order => `
+              <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5 hover:border-primary/20 transition-all group">
+                <div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
+                  <div>
+                    <span class="text-xs font-bold tracking-widest uppercase text-primary mb-1 block">Commande #${order.id}</span>
+                    <p class="text-sm text-zinc-500">${Orders.formatDate(order.date)}</p>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div class="text-right">
+                      <p class="text-sm font-bold">${Cart.formatPrice(order.total)}</p>
+                      <p class="text-xs text-zinc-400">${order.items.length} article${order.items.length > 1 ? 's' : ''}</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getStatusClass(order.status)}">
+                      ${getStatusLabel(order.status)}
+                    </span>
+                  </div>
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 border-t border-primary/5 pt-6">
+                  ${order.items.map(item => `
+                    <div class="aspect-square rounded-lg overflow-hidden bg-zinc-100">
+                      <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function switchClientTab(tabName) {
+    activeClientTab = tabName;
+    renderClient();
+  }
+
+  function updateProfile(event) {
+    event.preventDefault();
+    const user = Auth.getCurrentUser();
+    const newName = document.getElementById('profile-input-name').value.trim();
+    const newPassword = document.getElementById('profile-input-password').value;
+    const confirmPassword = document.getElementById('profile-input-confirm').value;
+
+    if (!newName) {
+      showProfileMessage('Le nom ne peut pas être vide.', 'error');
+      return;
+    }
+
+    if (newPassword && newPassword !== confirmPassword) {
+      showProfileMessage('Les mots de passe ne correspondent pas.', 'error');
+      return;
+    }
+
+    // Update in Storage user list
+    const users = Storage.get(Storage.KEYS.USERS) || [];
+    const userIdx = users.findIndex(u => u.id === user.id);
+    if (userIdx !== -1) {
+      users[userIdx].name = newName;
+      if (newPassword) {
+        users[userIdx].password = newPassword;
+      }
+      Storage.set(Storage.KEYS.USERS, users);
+
+      // Update current user session
+      user.name = newName;
+      Storage.set(Storage.KEYS.CURRENT_USER, user);
+
+      // Update sidebar headers
+      document.getElementById('profile-name').textContent = newName;
+
+      // Update header dropdown
+      SharedComponents.renderAuthLinks();
+
+      showProfileMessage('Profil mis à jour avec succès.', 'success');
+      
+      // Clear password fields
+      document.getElementById('profile-input-password').value = '';
+      document.getElementById('profile-input-confirm').value = '';
+    } else {
+      showProfileMessage('Erreur lors de la mise à jour.', 'error');
+    }
+  }
+
+  function showProfileMessage(text, type) {
+    const messageDiv = document.getElementById('profile-message');
+    if (!messageDiv) return;
+    messageDiv.textContent = text;
+    messageDiv.className = `p-4 rounded-xl text-sm font-medium ${type === 'success' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400' : 'bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400'}`;
+    messageDiv.classList.remove('hidden');
+    setTimeout(() => {
+      messageDiv.classList.add('hidden');
+    }, 4000);
   }
 
   function getStatusClass(status) {
