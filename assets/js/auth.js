@@ -76,5 +76,14 @@ const Auth = {
   isAdmin() {
     const user = this.getCurrentUser();
     return user && user.role === 'admin';
+  },
+
+  /**
+   * Redirect to login if user is not an admin
+   */
+  requireAdmin() {
+    if (!this.isAdmin()) {
+      window.location.href = '/auth/login.html';
+    }
   }
 };

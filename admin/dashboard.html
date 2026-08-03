@@ -25,7 +25,6 @@
           }
         }
       }
-    }
   </script>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
@@ -35,13 +34,13 @@
   <div class="flex flex-col md:flex-row gap-12">
     <!-- Admin Sidebar (Style Profile) -->
     <aside class="w-full md:w-64 space-y-8">
-      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-primary/5">
+      <div class="bg-[#FCFAF7] p-6 rounded-2xl shadow-sm border border-primary/10">
         <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
           <span class="material-icons-outlined text-3xl text-primary">admin_panel_settings</span>
         </div>
         <div class="text-center">
-          <h2 class="font-bold text-lg">Administration</h2>
-          <p class="text-[10px] tracking-widest uppercase opacity-40">ZINA Luxury</p>
+          <h2 class="font-bold text-lg text-zina-black">Administration</h2>
+          <p class="text-[10px] tracking-widest uppercase opacity-40 text-zina-black">ZINA Luxury</p>
         </div>
       </div>
       
@@ -50,31 +49,31 @@
           <span class="material-icons-outlined">dashboard</span>
           Tableau de bord
         </a>
-        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+        <a href="/admin/products.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 hover:text-primary font-medium flex items-center gap-3 transition-all">
           <span class="material-icons-outlined">inventory_2</span>
           Produits
         </a>
-        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+        <a href="/admin/orders.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 hover:text-primary font-medium flex items-center gap-3 transition-all">
           <span class="material-icons-outlined">shopping_cart</span>
           Commandes
         </a>
-        <a href="/admin/clients.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+        <a href="/admin/clients.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 hover:text-primary font-medium flex items-center gap-3 transition-all">
           <span class="material-icons-outlined">people</span>
           Clients
         </a>
-        <a href="/admin/reviews.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+        <a href="/admin/reviews.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 hover:text-primary font-medium flex items-center gap-3 transition-all">
           <span class="material-icons-outlined">rate_review</span>
           Avis
         </a>
-        <a href="/admin/notifications.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+        <a href="/admin/notifications.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 hover:text-primary font-medium flex items-center gap-3 transition-all">
           <span class="material-icons-outlined">notifications</span>
           Notifications
         </a>
-        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+        <a href="/admin/messages.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 hover:text-primary font-medium flex items-center gap-3 transition-all">
           <span class="material-icons-outlined">email</span>
           Messages
         </a>
-        <a href="/admin/chatbot.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-white dark:hover:bg-zinc-800 font-medium flex items-center gap-3 transition-all">
+        <a href="/admin/chatbot.html" class="w-full text-left px-6 py-3 rounded-xl hover:bg-primary/10 hover:text-primary font-medium flex items-center gap-3 transition-all">
           <span class="material-icons-outlined">psychology</span>
           Entraîner le Bot
         </a>
@@ -92,9 +91,9 @@
           <h1 class="text-4xl serif-text">Tableau de bord</h1>
           <p class="text-zinc-500 font-light">Vue d'ensemble de votre boutique</p>
         </div>
-        <div class="bg-white dark:bg-zinc-900 px-4 py-2 rounded-full border border-primary/10 flex items-center gap-2">
+        <div class="bg-[#FCFAF7] px-4 py-2 rounded-full border border-primary/10 flex items-center gap-2">
           <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-          <span class="text-xs font-bold uppercase tracking-widest">Live Status</span>
+          <span class="text-xs font-bold uppercase tracking-widest text-zina-black">Live Status</span>
         </div>
       </div>
 
@@ -134,31 +133,32 @@
   document.addEventListener('DOMContentLoaded', () => {
     const stats = Orders.getStats();
     const products = Products.getAll();
+    const allOrders = Orders.getAll();
     
     // Stats Injection with Premium Look
     document.getElementById('stats').innerHTML = `
-      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+      <div class="bg-[#FCFAF7] p-6 rounded-2xl border border-primary/10 shadow-sm">
         <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-2">Produits</p>
         <div class="flex items-end justify-between">
-          <span class="text-3xl font-bold">${products.length}</span>
+          <span class="text-3xl font-bold text-zina-black">${products.length}</span>
           <span class="material-icons-outlined text-primary/20 text-4xl">inventory_2</span>
         </div>
       </div>
-      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+      <div class="bg-[#FCFAF7] p-6 rounded-2xl border border-primary/10 shadow-sm">
         <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-2">Commandes</p>
         <div class="flex items-end justify-between">
-          <span class="text-3xl font-bold">${stats.total}</span>
+          <span class="text-3xl font-bold text-zina-black">${stats.total}</span>
           <span class="material-icons-outlined text-primary/20 text-4xl">shopping_cart</span>
         </div>
       </div>
-      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+      <div class="bg-[#FCFAF7] p-6 rounded-2xl border border-primary/10 shadow-sm">
         <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-2">En attente</p>
         <div class="flex items-end justify-between">
           <span class="text-3xl font-bold text-amber-500">${stats.pending}</span>
           <span class="material-icons-outlined text-amber-500/20 text-4xl">pending_actions</span>
         </div>
       </div>
-      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-primary/5 shadow-sm">
+      <div class="bg-[#FCFAF7] p-6 rounded-2xl border border-primary/10 shadow-sm">
         <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-2">Revenu total</p>
         <div class="flex items-end justify-between">
           <span class="text-2xl font-bold text-primary">${Cart.formatPrice(stats.revenue)}</span>
@@ -167,20 +167,21 @@
       </div>
     `;
 
-    const orders = Orders.getAll().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+    // Render Recent Orders List
+    const orders = [...allOrders].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
     const ordersContainer = document.getElementById('recent-orders');
     
     if (orders.length === 0) {
-      ordersContainer.innerHTML = '<div class="p-12 text-center bg-white rounded-2xl border border-dashed border-primary/20 text-zinc-400">Aucune commande pour le moment.</div>';
+      ordersContainer.innerHTML = '<div class="p-12 text-center bg-[#FCFAF7] rounded-2xl border border-dashed border-primary/20 text-zinc-400">Aucune commande pour le moment.</div>';
     } else {
       ordersContainer.innerHTML = orders.map(o => `
-        <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-primary/5 flex items-center justify-between group hover:border-primary/20 transition-all">
+        <div class="bg-[#FCFAF7] p-4 rounded-xl border border-primary/10 flex items-center justify-between group hover:border-primary/20 transition-all">
           <div class="flex items-center gap-4">
             <div class="w-10 h-10 bg-primary/5 rounded-full flex items-center justify-center font-bold text-primary text-xs">
               #${o.id}
             </div>
             <div>
-              <p class="font-bold text-sm">${o.shipping?.fullName || 'Client'}</p>
+              <p class="font-bold text-sm text-zina-black">${o.shipping?.fullName || 'Client'}</p>
               <p class="text-[10px] text-zinc-400 uppercase tracking-widest">${Orders.formatDate(o.date)}</p>
             </div>
           </div>
@@ -189,8 +190,12 @@
               <p class="font-bold text-primary text-sm">${Cart.formatPrice(o.total)}</p>
               <p class="text-[10px] text-zinc-400 uppercase tracking-widest">${o.items.length} articles</p>
             </div>
-            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-600">
-              ${o.status}
+            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+              o.status === 'completed' ? 'bg-emerald-50 text-emerald-600' :
+              o.status === 'pending' ? 'bg-amber-50 text-amber-600' :
+              'bg-blue-50 text-blue-600'
+            }">
+              ${o.status === 'completed' ? 'Livrée' : o.status === 'pending' ? 'En attente' : 'En cours'}
             </span>
             <a href="/admin/orders.html" class="material-icons-outlined text-zinc-300 hover:text-primary transition-colors">chevron_right</a>
           </div>

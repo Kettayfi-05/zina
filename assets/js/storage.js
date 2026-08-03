@@ -18,7 +18,9 @@ const Storage = {
     MESSAGES: 'zina_messages',
     CURRENT_USER: 'zina_current_user',
     AI_CONFIG: 'zina_ai_config',
-    REVIEWS: 'zina_reviews'
+    REVIEWS: 'zina_reviews',
+    WISHLIST: 'zina_wishlist',
+    RECENTLY_VIEWED: 'zina_recently_viewed'
   },
 
   /**
@@ -35,11 +37,8 @@ const Storage = {
       this.set(this.KEYS.CATEGORIES, this.getSeedCategories());
     }
 
-    // Seed products if not exists (or if they contain old placeholders or prices outside 150-400 Dhs range)
-    const existingProducts = this.get(this.KEYS.PRODUCTS);
-    const hasOldSeeds = existingProducts && existingProducts.some(p => p.name === 'Diamond Solitaire Ring');
-    const hasWrongPrices = existingProducts && existingProducts.some(p => p.price > 400 || p.price < 150);
-    if (!existingProducts || hasOldSeeds || hasWrongPrices) {
+    // Seed products if not exists
+    if (!this.get(this.KEYS.PRODUCTS)) {
       this.set(this.KEYS.PRODUCTS, this.getSeedProducts());
     }
 
@@ -53,13 +52,22 @@ const Storage = {
       this.set(this.KEYS.REVIEWS, this.getSeedReviews());
     }
 
-    // Initialize empty collections
-    if (!this.get(this.KEYS.ORDERS)) {
-      this.set(this.KEYS.ORDERS, []);
+    // Seed orders if not exists or empty
+    const existingOrders = this.get(this.KEYS.ORDERS);
+    if (!existingOrders || existingOrders.length === 0) {
+      this.set(this.KEYS.ORDERS, this.getSeedOrders());
     }
 
     if (!this.get(this.KEYS.MESSAGES)) {
       this.set(this.KEYS.MESSAGES, []);
+    }
+
+    if (!this.get(this.KEYS.WISHLIST)) {
+      this.set(this.KEYS.WISHLIST, []);
+    }
+
+    if (!this.get(this.KEYS.RECENTLY_VIEWED)) {
+      this.set(this.KEYS.RECENTLY_VIEWED, []);
     }
   },
 
@@ -705,6 +713,162 @@ const Storage = {
         comment: 'Superbe design, elle fait son effet. Très satisfaite.',
         date: '2026-08-01T18:20:00.000Z',
         approved: false
+      }
+    ];
+  },
+
+  getSeedOrders() {
+    return [
+      {
+        id: 1001,
+        userId: 2,
+        userName: 'Amina R.',
+        userEmail: 'amina.r@gmail.com',
+        items: [
+          {
+            productId: 1,
+            name: 'Luna d’Or',
+            price: 180,
+            quantity: 1,
+            image: '/assets/images/products/bague1.jfif',
+            category: 'bagues'
+          },
+          {
+            productId: 14,
+            name: 'Créoles Beldi Or',
+            price: 280,
+            quantity: 1,
+            image: '/assets/images/products/boucle1.jfif',
+            category: 'boucles'
+          }
+        ],
+        total: 460,
+        status: 'completed',
+        date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+        shipping: {
+          fullName: 'Amina R.',
+          address: '32 Boulevard d\'Anfa, Appt 5',
+          city: 'Casablanca',
+          postalCode: '20000',
+          country: 'Maroc',
+          phone: '+212 611 111 111'
+        }
+      },
+      {
+        id: 1002,
+        userId: 3,
+        userName: 'Youssef B.',
+        userEmail: 'youssef.b@gmail.com',
+        items: [
+          {
+            productId: 3,
+            name: 'Saphira Royale',
+            price: 350,
+            quantity: 1,
+            image: '/assets/images/products/bague3.jfif',
+            category: 'bagues'
+          }
+        ],
+        total: 350,
+        status: 'completed',
+        date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+        shipping: {
+          fullName: 'Youssef B.',
+          address: '15 Avenue de France',
+          city: 'Rabat',
+          postalCode: '10000',
+          country: 'Maroc',
+          phone: '+212 622 222 222'
+        }
+      },
+      {
+        id: 1003,
+        userId: 4,
+        userName: 'Laila K.',
+        userEmail: 'laila.k@gmail.com',
+        items: [
+          {
+            productId: 4,
+            name: 'Bague Étoile Scintillante',
+            price: 190,
+            quantity: 2,
+            image: '/assets/images/products/bague4.jfif',
+            category: 'bagues'
+          }
+        ],
+        total: 380,
+        status: 'processing',
+        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        shipping: {
+          fullName: 'Laila K.',
+          address: 'Résidence El Minzah, Hivernage',
+          city: 'Marrakech',
+          postalCode: '40000',
+          country: 'Maroc',
+          phone: '+212 633 333 333'
+        }
+      },
+      {
+        id: 1004,
+        userId: 2,
+        userName: 'Client User',
+        userEmail: 'client@zina.com',
+        items: [
+          {
+            productId: 1,
+            name: 'Luna d’Or',
+            price: 180,
+            quantity: 1,
+            image: '/assets/images/products/bague1.jfif',
+            category: 'bagues'
+          }
+        ],
+        total: 180,
+        status: 'pending',
+        date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        shipping: {
+          fullName: 'Client User',
+          address: 'Rue de Libye, Bourgogne',
+          city: 'Casablanca',
+          postalCode: '20100',
+          country: 'Maroc',
+          phone: '+212 644 444 444'
+        }
+      },
+      {
+        id: 1005,
+        userId: 5,
+        userName: 'Karim A.',
+        userEmail: 'karim.a@gmail.com',
+        items: [
+          {
+            productId: 14,
+            name: 'Créoles Beldi Or',
+            price: 280,
+            quantity: 1,
+            image: '/assets/images/products/boucle1.jfif',
+            category: 'boucles'
+          },
+          {
+            productId: 2,
+            name: 'Bague Solitaire Céleste',
+            price: 250,
+            quantity: 1,
+            image: '/assets/images/products/bague2.jfif',
+            category: 'bagues'
+          }
+        ],
+        total: 530,
+        status: 'pending',
+        date: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+        shipping: {
+          fullName: 'Karim A.',
+          address: '4 Boulevard Pasteur',
+          city: 'Tanger',
+          postalCode: '90000',
+          country: 'Maroc',
+          phone: '+212 655 555 555'
+        }
       }
     ];
   },

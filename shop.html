@@ -41,108 +41,264 @@
 
 <body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
 <div id="header-container"></div>
-<main class="pt-10">
-    <section style="padding: var(--spacing-xl) 0;">
-      <div class="container">
-        <!-- <div class="breadcrumbs">
-          <a href="/index.html">Home</a>
-          <span>/</span>
-          <span>Shop</span>
-        </div>
+<main class="py-12 px-6 max-w-7xl mx-auto">
+  <div class="space-y-6">
+    <div class="border-b border-primary/10 pb-6">
+      <h1 class="text-4xl serif-text">Notre Collection</h1>
+      <p class="text-zinc-500 font-light mt-1">Découvrez notre sélection de bijoux d'exception façonnés à la main</p>
+    </div>
 
-        <h1>Our Collection</h1>
-        <p style="color: var(--color-taupe); margin-bottom: var(--spacing-xl);">
-          Explore our exquisite selection of handcrafted jewelry
-        </p> -->
-
-        <!-- Filters -->
-        <div class="filters">
-          <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
-            <button class="filter-btn active" data-category="all">Nos produits</button>
-            <button class="filter-btn" data-category="bagues">Bagues</button>
-            <button class="filter-btn" data-category="colliers">Colliers</button>
-            <button class="filter-btn" data-category="boucles">Boucles</button>
-            <button class="filter-btn" data-category="bracelets">Bracelets</button>
-            <button class="filter-btn" data-category="beldi">Beldi</button>
-            <button class="filter-btn" data-category="ensembles">Ensembles</button>
-          </div>
-          
-          <div class="search-box">
-            <input type="text" id="search-input" placeholder="Chercher des produits...">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Left Column: Filters Sidebar -->
+      <aside class="w-full lg:w-64 space-y-8 bg-[#FCFAF7] p-6 rounded-2xl border border-primary/10 shadow-sm self-start">
+        <!-- Search -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-primary">Recherche</h3>
+          <div class="relative">
+            <input type="text" id="search-input" placeholder="Rechercher..." 
+                   class="w-full pl-4 pr-10 py-2.5 rounded-full border border-primary/10 bg-white focus:outline-none focus:border-primary text-sm text-zina-black">
+            <span class="material-icons-outlined absolute right-3 top-3 text-zinc-400 text-sm">search</span>
           </div>
         </div>
 
-        <!-- Products Grid -->
+        <!-- Categories -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-primary">Catégories</h3>
+          <div class="flex flex-col gap-2">
+            <button class="filter-btn text-left px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/5 hover:text-primary transition-all text-zina-black" data-category="all">Tout voir</button>
+            <button class="filter-btn text-left px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/5 hover:text-primary transition-all text-zina-black" data-category="bagues">Bagues</button>
+            <button class="filter-btn text-left px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/5 hover:text-primary transition-all text-zina-black" data-category="colliers">Colliers</button>
+            <button class="filter-btn text-left px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/5 hover:text-primary transition-all text-zina-black" data-category="boucles">Boucles</button>
+            <button class="filter-btn text-left px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/5 hover:text-primary transition-all text-zina-black" data-category="bracelets">Bracelets</button>
+            <button class="filter-btn text-left px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/5 hover:text-primary transition-all text-zina-black" data-category="beldi">Beldi</button>
+            <button class="filter-btn text-left px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/5 hover:text-primary transition-all text-zina-black" data-category="ensembles">Ensembles</button>
+          </div>
+        </div>
+
+        <!-- Material Filters -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-primary">Matière</h3>
+          <div class="flex flex-col gap-2.5 pl-2 text-sm text-zina-black">
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" name="material" value="all" checked class="rounded border-primary/20 text-primary focus:ring-primary">
+              <span>Tout</span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" name="material" value="or jaune" class="rounded border-primary/20 text-primary focus:ring-primary">
+              <span>Or Jaune</span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" name="material" value="or blanc" class="rounded border-primary/20 text-primary focus:ring-primary">
+              <span>Or Blanc</span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" name="material" value="argent" class="rounded border-primary/20 text-primary focus:ring-primary">
+              <span>Argent</span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" name="material" value="diamant" class="rounded border-primary/20 text-primary focus:ring-primary">
+              <span>Diamant</span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" name="material" value="saphir" class="rounded border-primary/20 text-primary focus:ring-primary">
+              <span>Saphir</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Price Filter -->
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xs font-bold uppercase tracking-widest text-primary">Prix Max</h3>
+            <span class="text-xs font-bold text-primary" id="price-value">1000 Dhs</span>
+          </div>
+          <input type="range" id="price-slider" min="0" max="1000" step="50" value="1000" 
+                 class="w-full accent-primary bg-zinc-200 h-1 rounded-full cursor-pointer">
+        </div>
+
+        <!-- Sort By -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-primary">Trier par</h3>
+          <select id="sort-select" class="w-full px-3 py-2.5 rounded-xl border border-primary/10 bg-white focus:outline-none focus:border-primary text-sm text-zina-black">
+            <option value="default">Par défaut</option>
+            <option value="price-asc">Prix : croissant</option>
+            <option value="price-desc">Prix : décroissant</option>
+            <option value="name-asc">Nom : A - Z</option>
+          </select>
+        </div>
+      </aside>
+
+      <!-- Right Column: Products Grid -->
+      <div class="flex-grow">
         <div class="product-grid" id="products-grid"></div>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <div id="footer-container"></div>
+    <!-- Recently Viewed Section -->
+    <div id="recently-viewed-section" class="mt-20 border-t border-primary/10 pt-12 space-y-6" style="display: none;">
+      <h2 class="text-2xl serif-text text-zina-black">Produits consultés récemment</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="recently-viewed-grid"></div>
+    </div>
+  </div>
+</main>
 
-  <script src="/assets/js/storage.js"></script>
-  <script src="/assets/js/auth.js"></script>
-  <script src="/assets/js/cart.js"></script>
-  <script src="/assets/js/products.js"></script>
-  <script src="/assets/js/orders.js"></script>
-  <script src="/assets/js/app.js"></script>
+<div id="footer-container"></div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      let currentCategory = 'all';
-      let searchQuery = '';
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/app.js"></script>
 
-      // Check URL params for category
-      const urlParams = new URLSearchParams(window.location.search);
-      const categoryParam = urlParams.get('category');
-      if (categoryParam) {
-        currentCategory = categoryParam;
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let maxPrice = 1000;
+    let selectedMaterials = ['all'];
+    let sortBy = 'default';
+
+    // Check URL params for category
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam) {
+      currentCategory = categoryParam;
+    }
+
+    // Function to render products with filters
+    function renderProducts() {
+      let products = Products.getAll();
+
+      // 1. Filter by Category
+      if (currentCategory !== 'all') {
+        products = products.filter(p => p.category === currentCategory);
       }
 
-      // Function to render products
-      function renderProducts() {
-        const products = Products.filter(currentCategory, searchQuery);
-        Products.renderGrid(products, 'products-grid');
+      // 2. Filter by Search Query
+      if (searchQuery) {
+        const lowerQuery = searchQuery.toLowerCase();
+        products = products.filter(p => 
+          p.name.toLowerCase().includes(lowerQuery) ||
+          (p.description && p.description.toLowerCase().includes(lowerQuery))
+        );
       }
 
-      // Initial render
-      renderProducts();
+      // 3. Filter by Price
+      products = products.filter(p => p.price <= maxPrice);
 
-      // Set active filter button
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        if (btn.dataset.category === currentCategory) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
-
-      // Category filter handlers
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          // Update active class
-          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-
-          // Update category and render
-          currentCategory = btn.dataset.category;
-          renderProducts();
+      // 4. Filter by Material
+      if (!selectedMaterials.includes('all')) {
+        products = products.filter(p => {
+          const textToSearch = (p.name + ' ' + (p.description || '')).toLowerCase();
+          return selectedMaterials.some(m => textToSearch.includes(m));
         });
-      });
+      }
 
-      // Search handler with debounce
-      let searchTimeout;
-      document.getElementById('search-input').addEventListener('input', (e) => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-          searchQuery = e.target.value;
-          renderProducts();
-        }, 300);
+      // 5. Sort products
+      if (sortBy === 'price-asc') {
+        products.sort((a, b) => a.price - b.price);
+      } else if (sortBy === 'price-desc') {
+        products.sort((a, b) => b.price - a.price);
+      } else if (sortBy === 'name-asc') {
+        products.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      Products.renderGrid(products, 'products-grid');
+    }
+
+    // Initial render
+    renderProducts();
+
+    // Set active filter button
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      if (btn.dataset.category === currentCategory) {
+        btn.classList.add('bg-primary', 'text-white');
+        btn.classList.remove('text-zina-black');
+      } else {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('text-zina-black');
+      }
+
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-primary', 'text-white');
+          b.classList.add('text-zina-black');
+        });
+        btn.classList.add('bg-primary', 'text-white');
+        btn.classList.remove('text-zina-black');
+        currentCategory = btn.dataset.category;
+        renderProducts();
       });
     });
-    
-  </script>
 
+    // Search handler with debounce
+    let searchTimeout;
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchQuery = e.target.value;
+        renderProducts();
+      }, 300);
+    });
+
+    // Price Slider
+    const slider = document.getElementById('price-slider');
+    const priceValue = document.getElementById('price-value');
+    slider.addEventListener('input', (e) => {
+      maxPrice = parseInt(e.target.value);
+      priceValue.textContent = maxPrice + ' Dhs';
+      renderProducts();
+    });
+
+    // Material Checkboxes
+    const materialCheckboxes = document.querySelectorAll('input[name="material"]');
+    materialCheckboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        if (cb.value === 'all') {
+          if (cb.checked) {
+            materialCheckboxes.forEach(other => {
+              if (other.value !== 'all') other.checked = false;
+            });
+            selectedMaterials = ['all'];
+          } else {
+            const anyChecked = Array.from(materialCheckboxes).some(other => other.value !== 'all' && other.checked);
+            if (!anyChecked) {
+              cb.checked = true;
+              selectedMaterials = ['all'];
+            }
+          }
+        } else {
+          if (cb.checked) {
+            document.querySelector('input[name="material"][value="all"]').checked = false;
+          }
+          const checkedBoxes = Array.from(materialCheckboxes).filter(other => other.checked && other.value !== 'all');
+          if (checkedBoxes.length === 0) {
+            document.querySelector('input[name="material"][value="all"]').checked = true;
+            selectedMaterials = ['all'];
+          } else {
+            selectedMaterials = checkedBoxes.map(other => other.value);
+          }
+        }
+        renderProducts();
+      });
+    });
+
+    // Sort Dropdown
+    document.getElementById('sort-select').addEventListener('change', (e) => {
+      sortBy = e.target.value;
+      renderProducts();
+    });
+
+    // Recently Viewed Products Grid
+    const viewedIds = Storage.get(Storage.KEYS.RECENTLY_VIEWED) || [];
+    if (viewedIds.length > 0) {
+      document.getElementById('recently-viewed-section').style.display = 'block';
+      const viewedProducts = viewedIds.map(id => Products.getById(id)).filter(p => p !== undefined);
+      Products.renderGrid(viewedProducts, 'recently-viewed-grid');
+    }
+  });
+</script>
 <script src="/assets/js/shared-components.js"></script>
 </body>
 </html>

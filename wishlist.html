@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes favoris - ZINA Jewelry</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#c6a15d",
+            "zina-black": "#0F0F0F",
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .serif-text {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zina-black dark:text-zina-ivory transition-colors duration-300">
+<div id="header-container"></div>
+
+<main class="py-12 px-6 max-w-7xl mx-auto min-h-[60vh]">
+  <div class="space-y-8">
+    <div class="border-b border-primary/10 pb-6">
+      <h1 class="text-4xl serif-text">Mes favoris</h1>
+      <p class="text-zinc-500 font-light mt-1">Vos bijoux préférés réunis en un seul endroit</p>
+    </div>
+
+    <!-- Wishlist Grid -->
+    <div id="wishlist-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <!-- Injected by JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="wishlist-empty" class="hidden text-center py-20 space-y-6">
+      <div class="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center mx-auto text-primary">
+        <span class="material-icons-outlined text-4xl">favorite_border</span>
+      </div>
+      <div class="space-y-2">
+        <h2 class="text-2xl serif-text">Votre liste est vide</h2>
+        <p class="text-zinc-400 font-light max-w-md mx-auto">Parcourez notre collection et ajoutez des pièces d'exception à vos favoris en cliquant sur l'icône cœur.</p>
+      </div>
+      <a href="/shop.html" class="inline-block bg-primary hover:bg-primary/95 text-white text-xs font-bold tracking-[0.2em] uppercase px-8 py-4 rounded-full transition-all">
+        Découvrir la collection
+      </a>
+    </div>
+  </div>
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/assets/js/storage.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src="/assets/js/orders.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/shared-components.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Security check: must be a logged-in client
+    const user = Auth.getCurrentUser();
+    if (!user || user.role !== 'client') {
+      alert('Accès réservé aux clients connectés.');
+      window.location.href = '/index.html';
+      return;
+    }
+
+    function renderWishlist() {
+      const wishlistIds = Wishlist.getAll();
+      const grid = document.getElementById('wishlist-grid');
+      const emptyState = document.getElementById('wishlist-empty');
+
+      if (wishlistIds.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      const favoritedProducts = wishlistIds.map(id => Products.getById(id)).filter(p => p !== undefined);
+      Products.renderGrid(favoritedProducts, 'wishlist-grid');
+    }
+
+    // Initial render
+    renderWishlist();
+
+    // Listen for wishlist updates (toggling a heart inside the wishlist page)
+    window.addEventListener('zina_wishlist_updated', () => {
+      renderWishlist();
+    });
+  });
+</script>
+</body>
+</html>

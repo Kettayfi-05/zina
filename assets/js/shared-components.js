@@ -5,10 +5,10 @@
 const SharedComponents = {
   getHeader() {
     return `
-<header class="fixed top-0 left-0 w-full z-50 bg-background-light/40 backdrop-blur-md border-b border-primary/10">
+<header class="fixed top-0 left-0 w-full z-50 bg-[#F8F6F2]/80 backdrop-blur-md border-b border-primary/10">
   <div class="max-w-[1600px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
     <div class="flex-1 flex items-center">
-      <button id="mobile-menu-btn" class="p-2 -ml-2 hover:text-primary transition-colors text-zina-black dark:text-white animate-fade-in" aria-label="Menu">
+      <button id="mobile-menu-btn" class="icon-btn -ml-2 animate-fade-in" aria-label="Menu">
         <span class="material-icons-outlined text-[28px]">menu</span>
       </button>
     </div>
@@ -18,12 +18,12 @@ const SharedComponents = {
       </a>
     </div>
     <div class="flex-1 flex items-center justify-end space-x-3 md:space-x-5">
-      <a href="/shop.html" class="hidden sm:block text-xs font-bold tracking-[0.18em] uppercase hover:text-primary transition-colors mr-2 text-zina-black dark:text-white">
+      <a href="/shop.html" class="hidden sm:block text-xs font-bold tracking-[0.18em] uppercase hover:text-primary transition-colors mr-2 text-zina-black">
         Collection
       </a>
       <!-- Dark mode toggle removed -->
       <div class="relative" id="auth-dropdown-wrapper">
-        <button id="auth-dropdown-btn" class="p-2 hover:text-primary transition-colors text-zina-black dark:text-white" aria-label="Compte">
+        <button id="auth-dropdown-btn" class="icon-btn" aria-label="Compte">
           <span class="material-icons-outlined text-[24px]">person</span>
         </button>
         <div id="auth-dropdown" class="dropdown-menu" style="width: 240px;"></div>
@@ -31,14 +31,14 @@ const SharedComponents = {
 
       <!-- Notifications Bell Icon -->
       <div class="relative" id="notifications-dropdown-wrapper" style="display: none;">
-        <button id="notifications-btn" class="p-2 relative hover:text-primary transition-colors text-zina-black dark:text-white" aria-label="Notifications">
+        <button id="notifications-btn" class="icon-btn relative" aria-label="Notifications">
           <span class="material-icons-outlined text-[24px]">notifications</span>
           <span id="notifications-badge" class="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-primary rounded-full text-white text-[9px] flex items-center justify-center font-black shadow-sm" style="display:none;">0</span>
         </button>
         <div id="notifications-dropdown" class="dropdown-menu w-[320px] max-h-[400px] overflow-y-auto"></div>
       </div>
 
-      <a href="/cart.html" id="cart-btn" class="p-2 relative hover:text-primary transition-colors text-zina-black dark:text-white" aria-label="Panier">
+      <a href="/cart.html" id="cart-btn" class="icon-btn relative" aria-label="Panier">
         <span class="material-icons-outlined text-[24px]">shopping_bag</span>
         <span id="cart-badge" class="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-primary rounded-full text-white text-[9px] flex items-center justify-center font-black shadow-sm" style="display:none;">0</span>
       </a>
@@ -241,6 +241,11 @@ const SharedComponents = {
             <span class="material-icons-outlined text-lg">person</span>
             <span>Mon profil</span>
           </a>
+          ${user.role === "client" ? `
+          <a href="/wishlist.html" class="flex items-center gap-3 py-3 px-5 hover:bg-primary/5 hover:text-primary transition-colors text-zinc-700 text-sm font-medium">
+            <span class="material-icons-outlined text-lg">favorite_border</span>
+            <span>Mes favoris</span>
+          </a>` : ""}
           ${user.role === "admin" ? `
           <a href="/admin/dashboard.html" class="flex items-center gap-3 py-3 px-5 hover:bg-primary/5 hover:text-primary transition-colors text-zinc-700 font-bold text-primary">
             <span class="material-icons-outlined text-lg">dashboard</span>
@@ -496,30 +501,46 @@ const SharedComponents = {
 };
 
 (function() {
-  // Injecter les scripts nécessaires dynamiquement
-  const injectScript = (src) => {
-    if (!document.querySelector(`script[src="${src}"]`)) {
+  // Injecter les scripts nécessaires dynamiquement avec callback
+  const injectScript = (src, callback) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (!existing) {
       const s = document.createElement('script');
       s.src = src;
       s.async = false;
+      if (callback) s.onload = callback;
       document.head.appendChild(s);
+    } else if (callback) {
+      // Si déjà présent, on s'assure qu'il est chargé
+      if (typeof Notifications !== 'undefined' && src.includes('notifications.js')) {
+        callback();
+      } else {
+        existing.addEventListener('load', callback);
+      }
     }
   };
-  injectScript('/assets/js/notifications.js');
-  injectScript('/assets/js/ai-agent.js');
 
   const init = () => {
     const h = document.getElementById("header-container");
     if (h) { 
       h.innerHTML = SharedComponents.getHeader(); 
       SharedComponents.initHeaderEvents(); 
-      // Attendre un court instant pour s'assurer que notifications.js est chargé
-      setTimeout(() => {
+      
+      // Initialiser les notifications dès que le fichier est chargé
+      injectScript('/assets/js/notifications.js', () => {
         SharedComponents.initNotificationEvents();
-      }, 50);
+      });
+      
+      injectScript('/assets/js/wishlist.js');
+      injectScript('/assets/js/ai-agent.js');
     }
     const f = document.getElementById("footer-container");
     if (f) f.innerHTML = SharedComponents.getFooter();
   };
-  if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", init); } else { init(); }
+  
+  if (document.readyState === "loading") { 
+    document.addEventListener("DOMContentLoaded", init); 
+  } else { 
+    init(); 
+  }
 })();

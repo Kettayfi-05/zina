@@ -134,6 +134,10 @@ const Products = {
    * Render product card HTML (Premium Version)
    */
   renderCard(product) {
+    const user = (typeof Auth !== 'undefined') ? Auth.getCurrentUser() : null;
+    const isWish = (typeof Wishlist !== 'undefined') && Wishlist.has(product.id);
+    const showHeart = !user || user.role === 'client';
+
     return `
       <div class="group cursor-pointer bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-primary/5 hover:border-primary/20" 
            onclick="window.location.href='/product.html?id=${product.id}'">
@@ -142,6 +146,13 @@ const Products = {
                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
           <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
           
+          ${showHeart ? `
+          <button id="wishlist-btn-${product.id}" onclick="event.stopPropagation(); Wishlist.toggle(${product.id})" 
+                  class="absolute top-4 right-4 p-2.5 rounded-full bg-white/90 backdrop-blur-md text-zinc-400 hover:text-red-500 shadow-md transition-all duration-300 z-20 hover:scale-110">
+            <span class="material-icons-outlined text-lg ${isWish ? 'text-red-500' : ''}">${isWish ? 'favorite' : 'favorite_border'}</span>
+          </button>
+          ` : ''}
+
           <div class="absolute bottom-4 left-4 right-4 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
             <button class="w-full bg-white/90 backdrop-blur-md text-zina-black text-[10px] font-bold py-3 uppercase tracking-[0.2em] rounded-full shadow-lg">
               Voir les détails

@@ -40,6 +40,12 @@
             </div>
           </div>
         </div>
+
+        <!-- Recently Viewed Section -->
+        <div id="recently-viewed-section" class="mt-20 border-t border-primary/10 pt-12 space-y-6" style="display: none;">
+          <h2 class="text-2xl serif-text text-zina-black">Produits consultés récemment</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="recently-viewed-grid"></div>
+        </div>
       </div>
     </section>
   </main>
@@ -73,6 +79,20 @@
       // Update breadcrumb
       document.getElementById('breadcrumb-product').textContent = product.name;
 
+      // Wishlist accessibility logic
+      const user = Auth.getCurrentUser();
+      const showHeart = !user || user.role === 'client';
+      const isWish = typeof Wishlist !== 'undefined' && Wishlist.has(product.id);
+
+      // Record recently viewed product for clients
+      if (user && user.role === 'client') {
+        let viewed = Storage.get(Storage.KEYS.RECENTLY_VIEWED) || [];
+        viewed = viewed.filter(id => id !== product.id);
+        viewed.unshift(product.id);
+        viewed = viewed.slice(0, 4);
+        Storage.set(Storage.KEYS.RECENTLY_VIEWED, viewed);
+      }
+
       // Render product detail
       const container = document.getElementById('product-detail');
       container.innerHTML = `
@@ -86,12 +106,30 @@
           <div class="product-detail-price">${Cart.formatPrice(product.price)}</div>
           <p class="product-detail-description">${product.description || "Une pièce d'exception façonnée à la main, alliant élégance intemporelle et design contemporain. Chaque détail a été pensé pour sublimer votre allure."}</p>
           
-          <div class="product-actions">
-            <button class="btn btn-add-cart" id="add-to-cart-btn">Ajouter au panier</button>
-            <a href="/shop.html" class="btn btn-continue text-center">Continuer mes achats</a>
+          <div class="product-actions" style="display: flex; gap: var(--spacing-sm); align-items: center;">
+            <button class="btn btn-add-cart" id="add-to-cart-btn" style="flex: 1;">Ajouter au panier</button>
+            ${showHeart ? `
+            <button id="wishlist-btn-${product.id}" onclick="Wishlist.toggle(${product.id})" 
+                    class="border border-primary/20 text-zinc-400 hover:text-red-500 hover:border-red-500/20 p-3 rounded-full flex items-center justify-center shadow-sm hover:shadow transition-all duration-300 hover:scale-105"
+                    style="width: 52px; height: 52px; min-width: 52px;"
+                    title="Ajouter aux favoris">
+              <span class="material-icons-outlined text-2xl ${isWish ? 'text-red-500' : ''}">${isWish ? 'favorite' : 'favorite_border'}</span>
+            </button>
+            ` : ''}
+            <a href="/shop.html" class="btn btn-continue text-center" style="flex: 1;">Boutique</a>
           </div>
         </div>
       `;
+
+      // Render recently viewed grid (excluding current)
+      const viewedIds = Storage.get(Storage.KEYS.RECENTLY_VIEWED) || [];
+      const otherViewedIds = viewedIds.filter(id => id !== product.id);
+      
+      if (otherViewedIds.length > 0) {
+        document.getElementById('recently-viewed-section').style.display = 'block';
+        const viewedProducts = otherViewedIds.map(id => Products.getById(id)).filter(p => p !== undefined);
+        Products.renderGrid(viewedProducts, 'recently-viewed-grid');
+      }
 
       // Add to cart handler
       document.getElementById('add-to-cart-btn').addEventListener('click', () => {
